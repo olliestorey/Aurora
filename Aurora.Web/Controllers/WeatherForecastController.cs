@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace Aurora.Controllers
+namespace Aurora.Web.Controllers
 {
     [ApiController]
     [Route("[controller]")]

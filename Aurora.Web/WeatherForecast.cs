@@ -1,4 +1,4 @@
-namespace Aurora
+namespace Aurora.Web
 {
     public class WeatherForecast
     {
