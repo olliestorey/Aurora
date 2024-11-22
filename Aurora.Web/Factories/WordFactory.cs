@@ -7,9 +7,9 @@
     /// </summary>
     public class HardcodedWordFactory : IWordFactory
     {
-        public Task<ICollection<string>> GetWords()
+        public Task<IEnumerable<string>> GetWords()
         {
-            return Task.FromResult((ICollection<string>)new List<string> {
+            return Task.FromResult((IEnumerable<string>)new List<string> {
                 "algorithm", "array", "async", "await", "backend", "binary", "bug", "class", "closure", "compile",
                 "constructor", "database", "debug", "dependency", "design", "exception", "framework", "frontend",
                 "function", "inheritance", "interface", "iteration", "javascript", "json", "lambda", "library",
@@ -21,6 +21,6 @@
 
     interface IWordFactory
     {
-        public Task<ICollection<string>> GetWords();
+        public Task<IEnumerable<string>> GetWords();
     }
 }
