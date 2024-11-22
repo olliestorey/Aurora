@@ -22,8 +22,6 @@ type Leaderboard = {
 
 const runtimeConfig = useRuntimeConfig();
 
-console.log(runtimeConfig);
-
 let leaderboard = ref<Leaderboard>({ entries: [] });
 
 async function useFetch(url: string) {
