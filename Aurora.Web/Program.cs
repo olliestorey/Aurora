@@ -1,3 +1,8 @@
+using Aurora.Web.Data;
+using Aurora.Web.Services;
+using Microsoft.EntityFrameworkCore;
+using System;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -13,9 +18,15 @@ builder.Services.AddCors(options =>
     {
         builder.AllowAnyOrigin()
                .AllowAnyMethod()
-               .AllowAnyHeader();
+        .AllowAnyHeader();
     });
 });
+
+
+builder.Services.AddDbContext<DatabaseContext>(options =>
+    options.UseSqlite("Data Source=app.db"));
+
+builder.Services.AddTransient<IGlobalLeaderboardService, GlobalLeaderboardService>();
 
 
 var app = builder.Build();
