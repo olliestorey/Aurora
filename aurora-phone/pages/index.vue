@@ -12,14 +12,49 @@
 
       <div class="join-room__functions">
         <h2 class="join-room__text">Join Room</h2>
-        <input type="text" placeholder="Enter room code" />
-        <button>Join</button>
+
+        <div class="join-room__form-details">
+          <input type="text" class ="cb-black" v-model="playerModel.name" placeholder="Enter display name" />
+          <input type="email" class ="cb-black" v-model="playerModel.email" placeholder="Enter your email" />
+        </div>
+
+        <input type="text" class ="cb-yellow join-room__code" v-model="playerModel.roomCode" placeholder="Enter room code" />
+      
+        <button @click="submitNewPlayerModel">Join</button>
       </div>
     </div>
 
   </div>
 </template>
 
+<script lang="ts" setup>
+import { ref } from 'vue';
+
+type PlayerModel = {
+  name: string;
+  email: string;
+  roomCode: string;
+};
+
+let playerModel = ref<PlayerModel>({
+  name: '',
+  email: '',
+  roomCode: ''
+});
+
+function submitNewPlayerModel() {
+  if (playerModel.value.name === '' || playerModel.value.email === '' || playerModel.value.roomCode === '') {
+    alert('Please fill in all fields');
+  } else {
+    console.log(playerModel.value);
+
+    //something about awaiting a true response from the server
+    //window.location.replace("/waiting")
+    window.location.replace("/game")
+  }
+}
+
+</script>
 
 <style lang="scss">
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
@@ -41,7 +76,7 @@ body {
   gap: 10%;
   align-items: center;
   height: 95vh;
-  width: 95vw;
+  width: 100vw;
   background: linear-gradient(20deg, rgb(255, 255, 255) 46.9%, rgb(54, 54, 54) 46%);
 
   &__cb {
@@ -61,6 +96,7 @@ body {
     width: calc(100% - 64px);
     gap: 16px;
     padding: 16px 0;
+    margin-top: 16px;
   }
 
   &__text {
@@ -73,18 +109,31 @@ body {
     align-items: center;
     gap: 16px;
   }
+
+  &__form-details {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 10px;
+  }
+
+  &__code {
+    background-color: rgb(54, 54, 54);
+
+    &::placeholder{
+      color: lightgray;
+    }
+  }
 }
 
 input {
+    font-family: 'Montserrat', sans-serif;
     text-align: center;
     color: #e5e5e5;
-    font-size: 18px;
     line-height: 18px;
-    padding: 16px;
+    padding: 16px 0;
     box-shadow: 0 5px 30px rgba(58, 58, 58, 0.38);
     border-radius: 10px;
     background-color: #fff;
-    height: 100%;
     border: 0px;
 }
 
@@ -101,8 +150,14 @@ button {
     border: 0;
 }
 
-.cb-yellow {
-  color: #e6c300;
+.cb {
+  &-black {
+    color: #171717;
+  }
+
+  &-yellow {
+    color: #e6c300;
+  }
 }
 
 </style>
