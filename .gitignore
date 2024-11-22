@@ -422,6 +422,6 @@ logs
 
 
 #SQLite DB
-*.db
-*.db-shm
-*.db-wal
+/Aurora.Web/*.db
+/Aurora.Web/*.db-shm
+/Aurora.Web/*.db-wal
