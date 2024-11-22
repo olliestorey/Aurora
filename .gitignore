@@ -425,3 +425,10 @@ logs
 /Aurora.Web/*.db
 /Aurora.Web/*.db-shm
 /Aurora.Web/*.db-wal
+*.db
+*.db-shm
+*.db-wal
+
+
+#Hide the naughty word list
+naughtywords.txt
