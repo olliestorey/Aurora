@@ -111,6 +111,14 @@ async function submitNewPlayerModel() {
         "roomCode",
         () => playerModel.value.roomCode
       );
+
+      response.json().then((data) => {
+        const playerKey = useState<string>(
+          "playerKey",
+          () => data.players[0].id
+        );
+      });
+
       await navigateTo({ path: "/waiting" });
     } else {
       $toast.error("Cannot join room");

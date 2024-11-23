@@ -25,6 +25,8 @@ const runtimeConfig = useRuntimeConfig();
    name: 'GameScreen',
    setup() { 
      const roomCode = useState("roomCode");
+     const playerKey = useState("playerKey");
+
      const fullWordList = ref([]);
 
      const currentPlayerWord = ref("");
@@ -70,9 +72,28 @@ const runtimeConfig = useRuntimeConfig();
        currentPlayerWord.value += letter;
        checkInputs();
      };
+
+    const submitWord = async (word) => {
+      const response = await fetch(
+        `${runtimeConfig.public.apiBase}/api/words/submitWord`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          method: "POST",
+          body: JSON.stringify({
+            roomCode: roomCode.value,
+            playerKey: playerKey.value,
+            word: word,
+          }),
+        }
+      );
+
+      return await response.json();
+    }
  
      // Check if the player's input is correct
-     const checkInputs = () => {
+     const checkInputs = async () => {
        if (
          currentPlayerWord.value &&
          currentAnagramWord.value &&
@@ -80,10 +101,25 @@ const runtimeConfig = useRuntimeConfig();
        ) {
          // All letters have been entered
          if (currentPlayerWord.value === currentAnagramWord.value) {
-           $toast.success('Correct Word!');
-           currentIndex.value++;
-           currentPlayerWord.value = "";
-           setCurrentAnagramWord();
+          let response = await submitWord(currentPlayerWord.value);
+          if (response.result) {
+            if (response.position !== null){
+              $toast.success('Game Complete');
+              useState(
+                "playerPosition",
+                () => response.position
+              );
+              await navigateTo({ path: "/results" });
+            } else {
+              $toast.success('Correct Word!');
+              currentIndex.value++;
+              currentPlayerWord.value = "";
+              setCurrentAnagramWord();
+            }
+          } else {
+            $toast.error('Duplicate Word!');
+          }
+
          } else {
            $toast.error('Incorrect Word!');
            currentPlayerWord.value = "";

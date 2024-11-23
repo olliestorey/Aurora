@@ -12,7 +12,7 @@
 import { ref, onMounted } from "vue";
 
 const roomCode = useState<string>("roomCode", () => genCode());
-const numberOfWordsInGame = ref<number>(5);
+const numberOfWordsInGame = ref<number>(1);
 const runtimeConfig = useRuntimeConfig();
 
 function regenRoomCode() {

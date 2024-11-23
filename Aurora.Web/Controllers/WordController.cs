@@ -35,32 +35,32 @@ namespace Aurora.Web.Controllers
             return await wordFactory.GetWords();
         }
 
-        [HttpPost]
-        public async Task<SubmitWordDto> SubmitWord(string roomCode, Guid playerKey, string word)
+        [HttpPost("submitWord")]
+        public async Task<SubmitWordDto> SubmitWord([FromBody] SubmitWordRequest request)
         {
-            var room = _roomService.GetRoomByCode(roomCode.ToString());
+            var room = _roomService.GetRoomByCode(request.RoomCode.ToString());
             if (room == null) return new SubmitWordDto(false, null);
 
-            var isWordExist = room.Words.Contains(word.ToLower());
+            var isWordExist = room.Words.Contains(request.Word.ToLower());
 
-            if (isWordExist && room.Players.Find(x => x.Id == playerKey)?.WordsSubmited.Contains(word) == false)
+            if (isWordExist && room.Players.Find(x => x.Id == request.PlayerKey)?.WordsSubmited.Contains(request.Word) == false)
             {
                 var lobbyUpdated = new PlayerScoreUpdatedEvent() { EventMessage = new { Players = room.Players } };
 
-                room.Players.Find(x => x.Id == playerKey).WordsSubmited.Add(word);
-                room.Players.Find(x => x.Id == playerKey).Score += score / room.Words.Count;
+                room.Players.Find(x => x.Id == request.PlayerKey).WordsSubmited.Add(request.Word);
+                room.Players.Find(x => x.Id == request.PlayerKey).Score += score / room.Words.Count;
 
                 await _roomService.UpdateRoom(room);
 
-                if (room.Words.Count == room.Players.Find(x => x.Id == playerKey).WordsSubmited.Count)
+                if (room.Words.Count == room.Players.Find(x => x.Id == request.PlayerKey).WordsSubmited.Count)
                 {
                     // Calculate player's position
                     var players = room.Players.OrderByDescending(x => x.Score).ToList();
-                    var playerPosition = players.FindIndex(x => x.Id == playerKey) + 1;
+                    var playerPosition = players.FindIndex(x => x.Id == request.PlayerKey) + 1;
                     var positionPoints = 21 - (playerPosition * 1);
-                    room.Players.Find(x => x.Id == playerKey).Score += positionPoints;
+                    room.Players.Find(x => x.Id == request.PlayerKey).Score += positionPoints;
 
-                    var playerFinished = new PlayerGameCompletedEvent() { EventMessage = new { PlayerName = room.Players.Find(x => x.Id == playerKey).Name } };
+                    var playerFinished = new PlayerGameCompletedEvent() { EventMessage = new { PlayerName = room.Players.Find(x => x.Id == request.PlayerKey).Name, Position = playerPosition } };
 
                     await Task.WhenAll(
                         Task.Run(() => _roomService.UpdateRoom(room)),
@@ -90,5 +90,12 @@ namespace Aurora.Web.Controllers
             Result = result;
             Position = position;
         }
+    }
+
+    public class SubmitWordRequest
+    {
+        public string RoomCode { get; set; }
+        public Guid PlayerKey { get; set; }
+        public string Word { get; set; }
     }
 }
