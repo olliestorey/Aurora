@@ -33,7 +33,7 @@ namespace Aurora.Web.Services
         }
     }
 
-    interface IGlobalLeaderboardService
+    public interface IGlobalLeaderboardService
     {
         public Task<(bool, string)> AddEntry(string name, int score, string email);
     }
