@@ -1,29 +1,38 @@
 <template>
-    <div class="game">
-      <div class="game__word-container">
-        <h1 class="game__word cb-yellow"> {{ gameCurrentTitle }} </h1>
-        <div class="game__word-entered">
-            <input type="text" :placeholder="currentPlayerWord" disabled />
-          </div>
-      </div>
-
-      <div class="game__letter-height">
-          <div class="game__letter-container">
-          <button v-for="(letter, index) in gameCurrentScrambleTile" :key="index" class="game__letter" @click="addLetter(letter, $event)"> {{ letter }} </button>
-          </div>
+  <div class="game">
+    <div class="game__word-container">
+      <h1 class="game__word cb-yellow">{{ gameCurrentTitle }}</h1>
+      <div class="game__word-entered">
+        <input type="text" :placeholder="currentPlayerWord" disabled />
       </div>
     </div>
-  </template>
- <script lang="js">
+
+    <div class="game__letter-height">
+      <div class="game__letter-container">
+        <button
+          v-for="(letter, index) in gameCurrentScrambleTile"
+          :key="index"
+          class="game__letter"
+          @click="addLetter(letter, $event)"
+        >
+          {{ letter }}
+        </button>
+      </div>
+    </div>
+    <button class="game__clear" @click="clearEntry()">Clear</button>
+    <!-- <button class="game_pass" @click="skipWord()">Skip</button> -->
+  </div>
+</template>
+<script lang="js">
  import { defineComponent, ref, onMounted } from 'vue';
  import { useNuxtApp } from '#app';
  const { $toast } = useNuxtApp();
 
 const runtimeConfig = useRuntimeConfig();
- 
+
  export default defineComponent({
    name: 'GameScreen',
-   setup() { 
+   setup() {
      const roomCode = useState("roomCode");
      const playerKey = useState("playerKey");
 
@@ -34,8 +43,8 @@ const runtimeConfig = useRuntimeConfig();
      const currentIndex = ref(0);
      const gameCurrentScrambleTile = ref("");
      const gameCurrentTitle = ref("");
- 
-    const fetchWordlist = async () => {  
+
+    const fetchWordlist = async () => {
       const response = await fetch(`${runtimeConfig.public.apiBase}/api/room?roomCode=${roomCode.value}`)
       const data = await response.json()
       fullWordList.value = data.words; // Update fullWordList with the fetched words
@@ -48,7 +57,7 @@ const runtimeConfig = useRuntimeConfig();
       }
       return scrambled;
     };
- 
+
     const setCurrentAnagramWord = () => {
       const word = fullWordList.value[currentIndex.value];
       currentAnagramWord.value = word;
@@ -60,12 +69,19 @@ const runtimeConfig = useRuntimeConfig();
         letter.classList.remove('game__letter--used');
       });
     };
- 
+
+    const clearEntry = () => {
+      this.currentPlayerWord = "";
+      document.querySelectorAll('.game__letter').forEach((letter) => {
+        letter.classList.remove('game__letter--used');
+      })
+    };
+
      const scrambledTitle = (word) => {
       //TODO - Keep spaces consistent
        return scrambleWord(word);
      };
- 
+
      // Add letter to the current word
      const addLetter = (letter, event) => {
        event.target.classList.add('game__letter--used');
@@ -91,7 +107,7 @@ const runtimeConfig = useRuntimeConfig();
 
       return await response.json();
     }
- 
+
      // Check if the player's input is correct
      const checkInputs = async () => {
        if (
@@ -129,12 +145,12 @@ const runtimeConfig = useRuntimeConfig();
          }
        }
      };
- 
+
      onMounted(async () => {
        await fetchWordlist();
        setCurrentAnagramWord();
      });
- 
+
      // Return everything needed for the template to access
      return {
        currentPlayerWord,
@@ -152,45 +168,42 @@ const runtimeConfig = useRuntimeConfig();
      };
    },
  });
- </script>
- 
- 
-  
-  
-  <style lang="scss">
-  @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
-  
-  html {
-    font-family: 'Montserrat', sans-serif;
-    font-size: large;
-  }
-  
-  body {
-    margin: 0;
+</script>
+
+<style lang="scss">
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+
+html {
+  font-family: "Montserrat", sans-serif;
+  font-size: large;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.game {
+  height: 95vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  &__letter {
+    cursor: pointer;
+    font-weight: 700;
+    text-transform: uppercase;
+    width: calc(25% - 8px);
     padding: 0;
-  }
-  
-  .game{
-    height: 95vh;
-    width: 100vw;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-  
-    &__letter {
-      cursor: pointer;
-      font-weight: 700;
-      text-transform: uppercase;
-      width: calc(25% - 8px);
-      padding: 0;
-  
-      &-container {
-        display: flex;
-        gap: 10px;
-        padding: 20px;
-        margin-top: 20px;
-        flex-wrap: wrap;
-      }
+
+    &-container {
+      display: flex;
+      gap: 10px;
+      padding: 20px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
 
     &--used {
       pointer-events: none;
