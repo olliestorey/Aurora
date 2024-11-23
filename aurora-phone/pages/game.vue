@@ -156,38 +156,38 @@ const runtimeConfig = useRuntimeConfig();
         flex-wrap: wrap;
       }
 
-      &--used {
-        pointer-events: none;
-        background-color: grey;
-        color: rgb(54, 54, 54);
-      }
-    }
-  
-    &__word {
-      text-align: center;
-      width: 100%;
-      margin: 0;
-      padding: 20px 0;
-      background-color: rgb(54, 54, 54);
-      margin-bottom: 20px;
-  
-      &-entered {
-        width: 100%;
-        display: flex;
-        justify-content: center;
-  
-        input {
-          font-size: 20px;
-          letter-spacing: 2px;
-          background-color: white;
-          box-shadow: 0 10px 30px rgb(58 58 58 / 59%);
-          border: 1px solid rgb(110, 110, 110);
-        }
-      }
-  
-      &-container {
-        flex: 1;
-      }
+    &--used {
+      pointer-events: none;
+      background-color: grey;
+      color: rgb(54, 54, 54);
     }
   }
-  </style>
+
+  &__word {
+    text-align: center;
+    width: 100%;
+    margin: 0;
+    padding: 20px 0;
+    background-color: rgb(54, 54, 54);
+    margin-bottom: 20px;
+
+    &-entered {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+
+      input {
+        font-size: 20px;
+        letter-spacing: 2px;
+        background-color: white;
+        box-shadow: 0 10px 30px rgb(58 58 58 / 59%);
+        border: 1px solid rgb(110, 110, 110);
+      }
+    }
+
+    &-container {
+      flex: 1;
+    }
+  }
+}
+</style>
