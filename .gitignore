@@ -432,3 +432,5 @@ logs
 
 #Hide the naughty word list
 naughtywords.txt
+
+*.orig

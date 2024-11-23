@@ -1,4 +1,6 @@
-﻿using Aurora.Web.Services;
+﻿using Aurora.Web.Data;
+using Aurora.Web.Events;
+using Aurora.Web.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.RegularExpressions;
 
@@ -8,13 +10,15 @@ namespace Aurora.Web.Controllers
     [Route("/api/room")]
     public class RoomController : ControllerBase
     {
+        private readonly IEventDispatcherService _eventDispatcherService;
         private readonly ILogger<RoomController> _logger;
         private readonly IRoomService _roomService;
 
-        public RoomController(ILogger<RoomController> logger, IRoomService roomService)
+        public RoomController(ILogger<RoomController> logger, IRoomService roomService, IEventDispatcherService eventDispatcherService)
         {
             _logger = logger;
             _roomService = roomService;
+            _eventDispatcherService = eventDispatcherService;
         }
 
         [HttpGet]
@@ -23,10 +27,10 @@ namespace Aurora.Web.Controllers
             return _roomService.GetRoomByCode(roomCode);
         }
 
-        [HttpPost]
-        public async Task<string> CreateRoom(string roomCode, int numberOfWordsInGame)
+        [HttpPost("create")]
+        public async Task<string> CreateRoom([FromBody] CreateRoomRequest request)
         {
-            var newRoom = await _roomService.CreateRoom(roomCode, numberOfWordsInGame);
+            var newRoom = await _roomService.CreateRoom(request.RoomCode, request.NumberOfWordsInGame);
 
             return newRoom.Code;
         }
@@ -70,5 +74,20 @@ namespace Aurora.Web.Controllers
             string pattern = @"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$";
             return Regex.IsMatch(email, pattern);
         }
+
+        [HttpPost]
+        [Route("sigr")]
+        public async Task<bool> Test()
+        {
+            var x = new PlayerJoinedGameEvent() { EventMessage = new { PlayerName = "TestPlaye" } };
+            await _eventDispatcherService.DispatchEventAsync(x);
+
+            return true;
+        }
+    }
+    public class CreateRoomRequest
+    {
+        public string RoomCode { get; set; }
+        public int NumberOfWordsInGame { get; set; }
     }
 }
