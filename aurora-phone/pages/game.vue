@@ -14,88 +14,110 @@
       </div>
     </div>
   </template>
- 
  <script lang="js">
- import { defineComponent } from 'vue';
+ import { defineComponent, ref, onMounted } from 'vue';
  import { useNuxtApp } from '#app';
+ const { $toast } = useNuxtApp();
+
+const runtimeConfig = useRuntimeConfig();
  
  export default defineComponent({
    name: 'GameScreen',
-   data() {
-     return {
-       currentPlayerWord: "",
-       currentAnagramWord: "",
-       currentIndex: 0,
+   setup() { 
+     const roomCode = useState("roomCode");
+     const fullWordList = ref([]);
+
+     const currentPlayerWord = ref("");
+     const currentAnagramWord = ref("");
+     const currentIndex = ref(0);
+     const gameCurrentScrambleTile = ref("");
+     const gameCurrentTitle = ref("");
  
-       gameCurrentScrambleTile: "",
-       gameCurrentTitle: "",
+    const fetchWordlist = async () => {  
+      const response = await fetch(`${runtimeConfig.public.apiBase}/api/room?roomCode=${roomCode.value}`)
+      const data = await response.json()
+      fullWordList.value = data.words; // Update fullWordList with the fetched words
+    };
+
+    const scrambleWord = (word) => {
+      let scrambled = word.split('').sort(() => Math.random() - 0.5).join('');
+      if (scrambled === word) {
+        return scrambleWord(word);
+      }
+      return scrambled;
+    };
+ 
+    const setCurrentAnagramWord = () => {
+      const word = fullWordList.value[currentIndex.value];
+      currentAnagramWord.value = word;
+      gameCurrentScrambleTile.value = scrambleWord(word);
+      gameCurrentTitle.value = scrambleWord(word);
+
+      // Reset all letter classes
+      document.querySelectorAll('.game__letter').forEach((letter) => {
+        letter.classList.remove('game__letter--used');
+      });
+    };
+ 
+     const scrambledTitle = (word) => {
+      //TODO - Keep spaces consistent
+       return scrambleWord(word);
      };
-   },
-   props: {
-     fullWordList: {
-       type: Array,
-       default: () => ['ollie', 'jess', 'niz', 'win', 'hackathon'], // Default word list
-     },
-   },
-   mounted() {
-     this.setCurrentAnagramWord();
-   },
-   methods: {
-     // Method to scramble a word
-     scrambleWord(word) {
-       let scrambled = word.split('').sort(() => Math.random() - 0.5).join('');
-       if (scrambled === word) {
-         return this.scrambleWord(word);
-       }
-       return scrambled;
-     },
-     // Set the current anagram and scramble the word
-     setCurrentAnagramWord() {
-       const word = this.fullWordList[this.currentIndex];
-       this.currentAnagramWord = word;
-       this.gameCurrentScrambleTile = this.scrambleWord(word);
-       this.gameCurrentTitle = this.scrambleWord(word);
  
-       // Reset all letter classes
-       document.querySelectorAll('.game__letter').forEach((letter) => {
-         letter.classList.remove('game__letter--used');
-       });
-     },
-     // Scramble a word
-     scrambledTitle(word) {
-       return this.scrambleWord(word);
-     },
      // Add letter to the current word
-     addLetter(letter, event) {
+     const addLetter = (letter, event) => {
        event.target.classList.add('game__letter--used');
-       this.currentPlayerWord += letter;
-       this.checkInputs();
-     },
+       currentPlayerWord.value += letter;
+       checkInputs();
+     };
+ 
      // Check if the player's input is correct
-     checkInputs() {
+     const checkInputs = () => {
        if (
-         this.currentPlayerWord &&
-         this.currentAnagramWord &&
-         this.currentPlayerWord.length === this.currentAnagramWord.length
+         currentPlayerWord.value &&
+         currentAnagramWord.value &&
+         currentPlayerWord.value.length === currentAnagramWord.value.length
        ) {
          // All letters have been entered
-         if (this.currentPlayerWord === this.currentAnagramWord) {
-            this.$toast.success('Correct Word!'); // Correct word notification
-            this.currentIndex++;
-            this.currentPlayerWord = "";
-            this.setCurrentAnagramWord();
+         if (currentPlayerWord.value === currentAnagramWord.value) {
+           $toast.success('Correct Word!');
+           currentIndex.value++;
+           currentPlayerWord.value = "";
+           setCurrentAnagramWord();
          } else {
-            this.$toast.error('Incorrect Word!'); // Incorrect word notification
-            this.currentPlayerWord = "";
-            document.querySelectorAll('.game__letter').forEach((letter) => {
-              letter.classList.remove('game__letter--used');
-            });
+           $toast.error('Incorrect Word!');
+           currentPlayerWord.value = "";
+           document.querySelectorAll('.game__letter').forEach((letter) => {
+             letter.classList.remove('game__letter--used');
+           });
          }
        }
-     },
+     };
+ 
+     onMounted(async () => {
+       await fetchWordlist();
+       setCurrentAnagramWord();
+     });
+ 
+     // Return everything needed for the template to access
+     return {
+       currentPlayerWord,
+       currentAnagramWord,
+       currentIndex,
+       gameCurrentScrambleTile,
+       gameCurrentTitle,
+       fullWordList,
+       scrambleWord,
+       setCurrentAnagramWord,
+       scrambledTitle,
+       addLetter,
+       checkInputs,
+       roomCode, // Make sure to return roomCode to use in the template
+     };
    },
  });
  </script>
+ 
  
   
   

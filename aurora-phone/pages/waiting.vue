@@ -4,10 +4,29 @@
       <div class="waiting-room">
           <h1 class="waiting-room__cb-title"> Waiting for game to start <span class="cb-yellow">...</span> </h1>
       </div>
-  
+      <button @click="test()">test start game</button>
     </div>
   </template>
   
+<script lang="js">
+
+export default defineComponent({
+   name: 'WaitScren',
+  setup() {
+    const rc = useState("roomCode");
+
+    onMounted(async () => {
+      alert(rc.value);
+    });
+  },
+  methods: {
+    test() {
+      navigateTo('/game');
+    }
+  }
+})
+</script>
+
   
   <style lang="scss">
   @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');

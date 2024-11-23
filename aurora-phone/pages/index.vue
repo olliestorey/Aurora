@@ -107,7 +107,6 @@ async function submitNewPlayerModel() {
 
     if (response.ok) {
       $toast.success("Joined successfully");
-      console.log(response);
       const roomCode = useState<string>(
         "roomCode",
         () => playerModel.value.roomCode

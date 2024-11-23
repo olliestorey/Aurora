@@ -35,7 +35,7 @@ namespace Aurora.Web.Controllers
             return newRoom.Code;
         }
 
-        [HttpPost("start")]
+        [HttpPost("startgame")]
         public bool StartGame(Guid roomKey)
         {
             // trigger game started event
