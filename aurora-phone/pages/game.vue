@@ -80,14 +80,16 @@
        ) {
          // All letters have been entered
          if (this.currentPlayerWord === this.currentAnagramWord) {
-           this.$toast.success('Correct Word!'); // Correct word notification
-           this.currentIndex++;
-           this.currentPlayerWord = "";
-           this.setCurrentAnagramWord();
+            this.$toast.success('Correct Word!'); // Correct word notification
+            this.currentIndex++;
+            this.currentPlayerWord = "";
+            this.setCurrentAnagramWord();
          } else {
-           this.$toast.error('Incorrect Word!'); // Incorrect word notification
-           this.currentPlayerWord = "";
-           this.setCurrentAnagramWord();
+            this.$toast.error('Incorrect Word!'); // Incorrect word notification
+            this.currentPlayerWord = "";
+            document.querySelectorAll('.game__letter').forEach((letter) => {
+              letter.classList.remove('game__letter--used');
+            });
          }
        }
      },
