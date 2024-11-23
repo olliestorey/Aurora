@@ -1,61 +1,90 @@
 <template>
     <div class="game">
       <div class="game__word-container">
-        <h1 class="game__word cb-yellow"> {{ scrambledTitle }} </h1>
+        <h1 class="game__word cb-yellow"> {{ gameCurrentTitle }} </h1>
         <div class="game__word-entered">
-            <input type="text" placeholder="" disabled/>
+            <input type="text" :placeholder="currentPlayerWord" disabled />
           </div>
       </div>
 
       <div class="game__letter-height">
           <div class="game__letter-container">
-          <button v-for="i in scrambledTiles" :key="i" class="game__letter"> {{ i }} </button>
+          <button v-for="(letter, index) in gameCurrentScrambleTile" :key="index" class="game__letter" @click="addLetter(letter, $event)"> {{ letter }} </button>
           </div>
       </div>
     </div>
   </template>
-
-  <script lang="ts">
+ 
+  <script lang="js">
   import { defineComponent } from 'vue';
   
   export default defineComponent({
     name: 'GameScreen',
+    data() {
+      return {
+        currentPlayerWord: "",
+        currentAnagramWord: "",
+        currentIndex: 0,
+
+        gameCurrentScrambleTile: "",
+        gameCurrentTitle: "",
+      };
+    },
     props: {
       fullWordList: {
-        type: Array as () => string[],
-        default: ['ollie', 'jess', 'niz', 'win', 'hackathon'],
-      },
-      currentAnagramWord: {
-        type: String as () => string,
-        default: 'im a long word',
-      },
-    },
-    computed: {
-      scrambledTitle(): string {
-        let scrambled: string;
-        do {
-          scrambled = this.scrambleWord(this.currentAnagramWord);
-        } while (scrambled === this.currentAnagramWord);
-        return scrambled;
-      },
-  
-      scrambledTiles(): string {
-        let scrambled: string;
-        do {
-          scrambled = this.currentAnagramWord.split('').sort(() => Math.random() - 0.5).join('');
-        } while (scrambled === this.currentAnagramWord);
-        return scrambled;
+        type: Array,
+        default: () => ['ollie', 'jess', 'niz', 'win', 'hackathon'], // Use a function for default array values
       },
     },
     mounted() {
-      console.log(this.fullWordList);
-      console.log(this.currentAnagramWord);
+      this.setCurrentAnagramWord();
     },
     methods: {
-      scrambleWord(word: string): string {
-        const chars = word.split('');
-        const letters = chars.filter(char => char !== ' ').sort(() => Math.random() - 0.5);
-        return chars.map(char => (char === ' ' ? ' ' : letters.shift()!)).join('');
+      scrambleWord(word) {
+        let scrambled = word.split('').sort(() => Math.random() - 0.5).join('');
+        if (scrambled === word) {
+          return this.scrambleWord(word);
+        }
+        return scrambled;
+      },
+      setCurrentAnagramWord() {
+        const word = this.fullWordList[this.currentIndex];
+        this.currentAnagramWord = word;
+
+        this.gameCurrentScrambleTile = this.scrambleWord(word);
+        this.gameCurrentTitle = this.scrambleWord(word);
+
+        document.querySelectorAll('.game__letter').forEach((letter) => {
+          letter.classList.remove('game__letter--used');
+        });
+      },
+      scrambledTitle(word) {
+        return this.scrambleWord(word)
+      },
+      addLetter(letter, event) {
+        event.target.classList.add('game__letter--used');
+      
+        this.currentPlayerWord += letter;
+        this.checkInputs();
+      },
+      checkInputs() {
+        if (
+          this.currentPlayerWord &&
+          this.currentAnagramWord &&
+          this.currentPlayerWord.length === this.currentAnagramWord.length
+        ) {
+          //All letters have been entered
+          if (this.currentPlayerWord === this.currentAnagramWord) {
+            console.log("GOOD!")
+            this.currentIndex++;
+            this.currentPlayerWord = "";
+            this.setCurrentAnagramWord();
+          } else {
+            console.log("BAD!")
+            this.currentPlayerWord = "";
+            this.setCurrentAnagramWord();
+          }
+        }
       },
     },
   });
@@ -96,6 +125,12 @@
         margin-top: 20px;
         flex-wrap: wrap;
       }
+
+      &--used {
+        pointer-events: none;
+        background-color: grey;
+        color: rgb(54, 54, 54);
+      }
     }
   
     &__word {
@@ -112,6 +147,7 @@
         justify-content: center;
   
         input {
+          font-size: 20px;
           letter-spacing: 2px;
           background-color: white;
           box-shadow: 0 10px 30px rgb(58 58 58 / 59%);
@@ -125,4 +161,3 @@
     }
   }
   </style>
-  
