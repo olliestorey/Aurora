@@ -1,4 +1,5 @@
-﻿using Aurora.Web.Factories;
+﻿using Aurora.Web.Events;
+using Aurora.Web.Factories;
 using Aurora.Web.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,12 +12,14 @@ namespace Aurora.Web.Controllers
     {
         private readonly ILogger<RoomController> _logger;
         private readonly IRoomService _roomService;
+        private readonly IEventDispatcherService _eventDispatcherService;
         private readonly int score = 100;
 
-        public WordController(ILogger<RoomController> logger, IRoomService roomService)
+        public WordController(ILogger<RoomController> logger, IRoomService roomService, IEventDispatcherService eventDispatcherService)
         {
             _logger = logger;
             _roomService = roomService;
+            _eventDispatcherService = eventDispatcherService;
         }
 
         /// <summary>
@@ -42,6 +45,8 @@ namespace Aurora.Web.Controllers
 
             if (isWordExist && room.Players.Find(x => x.Id == playerKey)?.WordsSubmited.Contains(word) == false)
             {
+                var lobbyUpdated = new PlayerScoreUpdatedEvent() { EventMessage = new { Players = room.Players } };
+
                 room.Players.Find(x => x.Id == playerKey).WordsSubmited.Add(word);
                 room.Players.Find(x => x.Id == playerKey).Score += score / room.Words.Count;
 
@@ -54,15 +59,22 @@ namespace Aurora.Web.Controllers
                     var playerPosition = players.FindIndex(x => x.Id == playerKey) + 1;
                     var positionPoints = 21 - (playerPosition * 1);
                     room.Players.Find(x => x.Id == playerKey).Score += positionPoints;
-                    await _roomService.UpdateRoom(room);
+
+                    var playerFinished = new PlayerGameCompletedEvent() { EventMessage = new { PlayerName = room.Players.Find(x => x.Id == playerKey).Name } };
+
+                    await Task.WhenAll(
+                        Task.Run(() => _roomService.UpdateRoom(room)),
+                        _eventDispatcherService.DispatchEventAsync(lobbyUpdated),
+                        _eventDispatcherService.DispatchEventAsync(playerFinished)
+                    );
 
                     return new SubmitWordDto(true, playerPosition);
                 }
 
+                await _eventDispatcherService.DispatchEventAsync(lobbyUpdated);
+
                 return new SubmitWordDto(true, null);
             }
-
-            // trgger player score update event 
 
             return new SubmitWordDto(false, null);
         }

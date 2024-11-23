@@ -11,9 +11,7 @@
 <script lang="ts" setup>
 import * as signalR from "@microsoft/signalr";
 const { $toast } = useNuxtApp();
-
 const runtimeConfig = useRuntimeConfig();
-
 const roomCode = useState<string>("roomCode");
 
 const connection = new signalR.HubConnectionBuilder()
