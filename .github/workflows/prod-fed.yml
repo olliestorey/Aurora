@@ -1,0 +1,51 @@
+name: Deploy Nuxt Projects
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        project:
+          - aurora-global-lboard
+          - aurora-phone
+          - aurora-server
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20.12.0'
+
+      - name: Install dependencies
+        run: |
+          cd ${{ matrix.project }}
+          npm install
+
+      - name: Build project
+        run: |
+          cd ${{ matrix.project }}
+          npm run build
+
+      - name: Install Netlify CLI
+        run: npm install -g netlify-cli
+
+      - name: Deploy to Netlify
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+        run: |
+          cd ${{ matrix.project }}
+          if [ "${{ matrix.project }}" == "aurora-global-lboard" ]; then
+            NETLIFY_SITE_ID=${{ secrets.NETLIFY_SITE_ID_AURORA_GLOBAL_LBOARD }}
+          elif [ "${{ matrix.project }}" == "aurora-phone" ]; then
+            NETLIFY_SITE_ID=${{ secrets.NETLIFY_SITE_ID_AURORA_PHONE }}
+          elif [ "${{ matrix.project }}" == "aurora-server" ]; then
+            NETLIFY_SITE_ID=${{ secrets.NETLIFY_SITE_ID_AURORA_SERVER }}
+          fi
+          netlify deploy --prod --dir=dist --site=$NETLIFY_SITE_ID
