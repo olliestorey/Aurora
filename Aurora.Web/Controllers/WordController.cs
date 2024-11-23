@@ -25,6 +25,7 @@ namespace Aurora.Web.Controllers
         /// <param name="roomKey"></param>
         /// <returns></returns>
         [HttpGet]
+        [Route(nameof(GetWords))]
         public async Task<IEnumerable<string>> GetWords(Guid roomKey)
         {
             var wordFactory = new HardcodedWordFactory();
