@@ -9,12 +9,27 @@
     </div>
 
     <div class="leaderboard-global__results">
-      <p v-for="entry in gameLobby.players" :key="entry.id" class="leaderboard-global__entry cb-black">
+      <p v-for="(entry, index) in gameLobby.players" :key="entry.id" class="leaderboard-global__entry cb-black">
         <div class="leaderboard-global__details">
-          <span class="leaderboard-global__entry-position cb-yellow--bg"> {{ entry.id + 1 }} </span>
+          <span class="leaderboard-global__entry-position cb-yellow--bg"> {{ index + 1 }} </span>
           <span class="leaderboard-global__entry-name"> {{ entry.name }} </span>
         </div>
-        <span class="leaderboard-global__entry-score cb-yellow--bg"> {{ entry.score }} </span>
+
+        <div class="leaderboard-game__score">
+          <span 
+            v-for="i in entry.wordsSubmited.length" 
+            :key="i" 
+            class="leaderboard-global__entry-score cb-yellow--bg"
+          > 1
+          </span>
+
+          <span 
+            v-for="i in (gameLobby.totalWords - entry.wordsSubmited.length)" 
+            :key="i" 
+            class="leaderboard-global__entry-score cb-yellow--bg"
+          > 0
+          </span>
+        </div>
       </p>
     </div>
   </div>
@@ -25,7 +40,7 @@ import * as signalR from "@microsoft/signalr";
 import { ref } from "vue";
 const runtimeConfig = useRuntimeConfig();
 
-const gameLobby = ref({ players: [] });
+const gameLobby = ref({ players: [], totalWords: 0 });
 
 const connection = new signalR.HubConnectionBuilder()
   .withUrl(`${runtimeConfig.public.apiBase}/ws/player`, {
@@ -36,9 +51,116 @@ const connection = new signalR.HubConnectionBuilder()
 connection.on('PlayerScoreUpdatedEvent', (dto) => {
   console.log(dto);
   gameLobby.value.players = dto.players.sort((x, y) => y.score - x.score);
+  gameLobby.value.totalWords = dto.totalWords;
   console.log(gameLobby.value);
 });
 
 connection.start();
 </script>
+
+<style lang="scss">
+  html {
+    font-family: 'Montserrat', sans-serif;
+    font-size: large;
+
+    &:has(.leaderboard-global) {
+      background-color: rgb(54, 54, 54);
+    }
+  }
+  
+  body {
+    margin: 0;
+    padding: 0;
+  }
+
+.leaderboard {
+  &-game__score{
+    display: flex;
+    gap: 4px;
+  }
+  &-global{
+      display: flex;
+      color: white;
+      background: rgb(54, 54, 54);
+      margin: 0;
+      border-bottom: 4px solid #e6c300;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+
+    &__entry {
+      background-color: white;
+      margin: 0;
+      padding: 10px;
+      border-radius: 50px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      &-position {
+        padding: 10px;
+        border-radius: 100%;
+        width: 18px;
+        height: 18px;
+        text-align: center;
+        line-height: 18px;
+        font-weight: bolder;
+      }
+
+      &-score {
+        padding: 10px;
+        border-radius: 50px;
+        width: min-content;
+        height: 18px;
+        text-align: center;
+        line-height: 18px;
+        font-weight: bolder;
+      }
+
+      &-name {
+        line-height: 40px;
+        text-align: center;
+      }
+    }
+
+    &__details {
+      display: flex;
+      gap: 20px;
+      width: min-content;
+    }
+
+    &__results {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding: 10px;
+      
+      background: rgb(54, 54, 54)
+    }
+
+    &__title {
+      margin: 0;
+      padding-top: 16px;
+    }
+  }
+
+  .cb {
+    &-black {
+      color: #171717;
+    }
+
+    &-yellow {
+      color: #e6c300;
+
+      &--bg {
+        background-color: #e6c300;
+      }
+    }
+  }
+}
+</style>
 

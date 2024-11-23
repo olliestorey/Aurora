@@ -45,7 +45,7 @@ namespace Aurora.Web.Controllers
 
             if (isWordExist && room.Players.Find(x => x.Id == request.PlayerKey)?.WordsSubmited.Contains(request.Word) == false)
             {
-                var lobbyUpdated = new PlayerScoreUpdatedEvent() { EventMessage = new { Players = room.Players } };
+                var lobbyUpdated = new PlayerScoreUpdatedEvent() { EventMessage = new { Players = room.Players, TotalWords = room.Words.Count() } };
 
                 room.Players.Find(x => x.Id == request.PlayerKey).WordsSubmited.Add(request.Word);
                 room.Players.Find(x => x.Id == request.PlayerKey).Score += score / room.Words.Count;
