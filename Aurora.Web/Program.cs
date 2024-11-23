@@ -1,12 +1,11 @@
 using Aurora.Web.Data;
 using Aurora.Web.Services;
 using Microsoft.EntityFrameworkCore;
-using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
+builder.Services.AddMemoryCache();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -27,6 +26,7 @@ builder.Services.AddDbContext<DatabaseContext>(options =>
     options.UseSqlite("Data Source=app.db"));
 
 builder.Services.AddTransient<IGlobalLeaderboardService, GlobalLeaderboardService>();
+builder.Services.AddTransient<IRoomService, RoomService>();
 
 
 var app = builder.Build();
