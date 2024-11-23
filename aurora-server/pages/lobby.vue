@@ -39,7 +39,7 @@ connection.on("PlayerJoinedGameEvent", (dto) => {
 connection.start().catch((err) => console.error(err.toString()));
 
 const rconnection = new signalR.HubConnectionBuilder()
-  .withUrl(`${runtimeConfig.public.apiBase}/ws/room`, {
+  .withUrl(`${runtimeConfig.public.apiBase}/ws/game`, {
     withCredentials: false, // This is important, otherwise you get CORS errors
   })
   .build();
@@ -68,6 +68,9 @@ async function startGame() {
   const response = await fetch(
     `${runtimeConfig.public.apiBase}/api/room/startgame`,
     {
+      headers: {
+        "Content-Type": "application/json",
+      },
       method: "POST",
       body: JSON.stringify({
         roomCode: roomCode.value,

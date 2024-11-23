@@ -21,7 +21,7 @@ const connection = new signalR.HubConnectionBuilder()
   .build();
 
 connection.on("GameStartedEvent", (dto) => {
-  if (dto.roomCode === roomCode) {
+  if (dto.roomCode === roomCode.value) {
     navigateTo({ path: "/game" });
   } else {
     $toast.error("Cannot add you to lobby");

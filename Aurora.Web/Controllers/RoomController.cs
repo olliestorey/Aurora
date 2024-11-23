@@ -36,9 +36,9 @@ namespace Aurora.Web.Controllers
         }
 
         [HttpPost("startgame")]
-        public async Task<bool> StartGame(string roomCode)
+        public async Task<bool> StartGame([FromBody]StartGameRequest request)
         {
-            var x = new GameStartedEvent() { EventMessage = new { RoomCode = roomCode } };
+            var x = new GameStartedEvent() { EventMessage = new { RoomCode = request.RoomCode } };
             await _eventDispatcherService.DispatchEventAsync(x);
 
             return true;
@@ -93,5 +93,9 @@ namespace Aurora.Web.Controllers
 
         public string PlayerName { get; set; }
         public string PlayerEmail { get;set; }
+    }
+    public class StartGameRequest
+    {
+        public string RoomCode { get; set; }
     }
 }
