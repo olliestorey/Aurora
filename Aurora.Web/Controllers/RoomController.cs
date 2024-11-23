@@ -1,4 +1,4 @@
-﻿using Aurora.Web.Data;
+﻿using Aurora.Web.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Aurora.Web.Controllers
@@ -8,23 +8,29 @@ namespace Aurora.Web.Controllers
     public class RoomController : ControllerBase
     {
         private readonly ILogger<RoomController> _logger;
+        private readonly IRoomService _roomService;
 
-        public RoomController(ILogger<RoomController> logger)
+        public RoomController(ILogger<RoomController> logger, IRoomService roomService)
         {
             _logger = logger;
+            _roomService = roomService;
         }
 
-        [HttpPost]
-        public string CreateRoom(string roomCode, int numberOfWordsInGame)
+        [HttpGet]
+        public Room GetRoomByCode(string roomCode)
         {
-            // number of words must be > 5
-
-            // generates words and associates them with the room
-
-            return "GUID_FOR_ROOM_KEY";
+            return _roomService.GetRoomByCode(roomCode);
         }
 
         [HttpPost]
+        public async Task<string> CreateRoom(string roomCode, int numberOfWordsInGame)
+        {
+            var newRoom = await _roomService.CreateRoom(roomCode, numberOfWordsInGame);
+
+            return newRoom.Code;
+        }
+
+        [HttpPost("start")]
         public bool StartGame(Guid roomKey)
         {
             // trigger game started event
@@ -32,13 +38,13 @@ namespace Aurora.Web.Controllers
             return true;
         }
 
-        [HttpPost]
-        public string JoinRoom(string roomCode, string playerName, string playerEmail)
+        [HttpPost("join")]
+        public Room JoinRoom(string roomCode, string playerName, string playerEmail)
         {
-            // validate name and email against naughty words
+            var room = _roomService.JoinRoom(roomCode, playerName, playerEmail);
 
             // trigger player joined event
-            return "GUID_FOR_ROOM_KEY";
+            return room;
         }
     }
 }

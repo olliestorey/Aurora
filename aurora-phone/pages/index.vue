@@ -29,6 +29,7 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
+const { $toast } = useNuxtApp()
 
 type PlayerModel = {
   name: string;
@@ -44,10 +45,11 @@ let playerModel = ref<PlayerModel>({
 
 function submitNewPlayerModel() {
   if (playerModel.value.name === '' || playerModel.value.email === '' || playerModel.value.roomCode === '') {
-    alert('Please fill in all fields');
+     $toast.error('Please fill in all fields')
+     
   } else {
     console.log(playerModel.value);
-
+    $toast.success('Joined successfully')
     //something about awaiting a true response from the server
     //window.location.replace("/waiting")
     window.location.replace("/game")

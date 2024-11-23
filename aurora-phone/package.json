@@ -12,7 +12,8 @@
   "dependencies": {
     "nuxt": "^3.14.1592",
     "vue": "latest",
-    "vue-router": "latest"
+    "vue-router": "latest",
+    "vue3-toastify": "^0.2.4"
   },
   "devDependencies": {
     "sass": "^1.81.0",

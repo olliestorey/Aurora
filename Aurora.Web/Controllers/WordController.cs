@@ -1,4 +1,5 @@
 ﻿using Aurora.Web.Factories;
+using Aurora.Web.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Aurora.Web.Controllers
@@ -9,10 +10,12 @@ namespace Aurora.Web.Controllers
     public class WordController : ControllerBase
     {
         private readonly ILogger<RoomController> _logger;
+        private readonly IRoomService _roomService;
 
-        public WordController(ILogger<RoomController> logger)
+        public WordController(ILogger<RoomController> logger, IRoomService roomService)
         {
             _logger = logger;
+            _roomService = roomService;
         }
 
         /// <summary>
@@ -29,17 +32,24 @@ namespace Aurora.Web.Controllers
         }
 
         [HttpPost]
-        public bool SubmitWord(Guid roomKey, Guid playerKey, string word)
+        public async Task<bool> SubmitWord(string roomCode, Guid playerKey, string word)
         {
-            // validate word exists in game
+            var room = _roomService.GetRoomByCode(roomCode.ToString());
+            var isWordExist = room.Words.Contains(word.ToLower());
 
-            // validate that player has not already submitted this word
+            if (isWordExist && room.Players.Find(x => x.Id == playerKey)?.WordsSubmited.Contains(word) == false)
+            {
+                room.Players.Find(x => x.Id == playerKey).WordsSubmited.Add(word);
+                room.Players.Find(x => x.Id == playerKey).Score += 25;
 
-            // update player score in game state
+                await _roomService.UpdateRoom(room);
+
+                return true;
+            }
 
             // trgger player score update event 
 
-            return true;
+            return false;
         }
     }
 }
