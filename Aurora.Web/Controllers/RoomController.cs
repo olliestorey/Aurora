@@ -36,9 +36,10 @@ namespace Aurora.Web.Controllers
         }
 
         [HttpPost("start")]
-        public bool StartGame(Guid roomKey)
+        public async Task<bool> StartGame(string roomCode)
         {
-            // trigger game started event
+            var x = new GameStartedEvent() { EventMessage = new { RoomCode = roomCode } };
+            await _eventDispatcherService.DispatchEventAsync(x);
 
             return true;
         }
