@@ -1,5 +1,6 @@
 ﻿using Aurora.Web.Services;
 using Microsoft.AspNetCore.Mvc;
+using System.Text.RegularExpressions;
 
 namespace Aurora.Web.Controllers
 {
@@ -17,7 +18,7 @@ namespace Aurora.Web.Controllers
         }
 
         [HttpGet]
-        public Room GetRoomByCode(string roomCode)
+        public Room? GetRoomByCode(string roomCode)
         {
             return _roomService.GetRoomByCode(roomCode);
         }
@@ -39,12 +40,35 @@ namespace Aurora.Web.Controllers
         }
 
         [HttpPost("join")]
-        public Room JoinRoom(string roomCode, string playerName, string playerEmail)
+        public IActionResult JoinRoom(string roomCode, string playerName, string playerEmail)
         {
+            string[] names = System.IO.File.ReadAllLines("naughtywords.txt");
+            if (names.Contains(playerName))
+            {
+                return BadRequest("Please choose an appropriate name");
+            }
+
+            if (!IsValidEmail(playerEmail))
+            {
+                return BadRequest("Invalid email address");
+            }
+
             var room = _roomService.JoinRoom(roomCode, playerName, playerEmail);
 
             // trigger player joined event
-            return room;
+            return Ok(room);
+        }
+
+        [HttpDelete()]
+        public bool DeleteRoom(string roomCode)
+        {
+            return _roomService.DeleteRoom(roomCode);
+        }
+
+        private bool IsValidEmail(string email)
+        {
+            string pattern = @"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$";
+            return Regex.IsMatch(email, pattern);
         }
     }
 }
