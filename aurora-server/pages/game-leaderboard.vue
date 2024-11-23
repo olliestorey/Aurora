@@ -9,7 +9,7 @@
     </div>
 
     <div class="leaderboard-global__results">
-      <p v-for="entry in gameLobby.lobby" :key="entry.id" class="leaderboard-global__entry cb-black">
+      <p v-for="entry in gameLobby.players" :key="entry.id" class="leaderboard-global__entry cb-black">
         <div class="leaderboard-global__details">
           <span class="leaderboard-global__entry-position cb-yellow--bg"> {{ entry.id + 1 }} </span>
           <span class="leaderboard-global__entry-name"> {{ entry.name }} </span>
@@ -20,24 +20,12 @@
   </div>
 </template>
 
-<script lang="ts" setup>
+<script setup>
 import * as signalR from "@microsoft/signalr";
 import { ref } from "vue";
 const runtimeConfig = useRuntimeConfig();
 
-interface Player {
-  id: string;
-  name: string;
-  email: string;
-  score: number;
-  wordsSubmitted: string[];
-}
-
-interface Lobby {
-  lobby: Player[];
-}
-
-const gameLobby = ref<Lobby>({ lobby: [] });
+const gameLobby = ref({ players: [] });
 
 const connection = new signalR.HubConnectionBuilder()
   .withUrl(`${runtimeConfig.public.apiBase}/ws/player`, {
@@ -45,10 +33,12 @@ const connection = new signalR.HubConnectionBuilder()
   })
   .build();
 
-connection.on("PlayerScoreUpdatedEvent", (dto) => {
+connection.on('PlayerScoreUpdatedEvent', (dto) => {
   console.log(dto);
-  gameLobby.value = dto.lobby.sort((x:Player) => x.score);
+  gameLobby.value.players = dto.players.sort((x, y) => y.score - x.score);
+  console.log(gameLobby.value);
 });
 
-connection.start().catch((err) => console.error(err.toString()));
+connection.start();
 </script>
+
