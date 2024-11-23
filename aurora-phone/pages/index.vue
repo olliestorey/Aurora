@@ -51,6 +51,7 @@ function submitNewPlayerModel() {
     console.log(playerModel.value);
     $toast.success('Joined successfully')
     //something about awaiting a true response from the server
+    //  TODO - Player is added to game api thingy here
     //window.location.replace("/waiting")
     window.location.replace("/game")
   }

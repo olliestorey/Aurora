@@ -15,80 +15,86 @@
     </div>
   </template>
  
-  <script lang="js">
-  import { defineComponent } from 'vue';
-  
-  export default defineComponent({
-    name: 'GameScreen',
-    data() {
-      return {
-        currentPlayerWord: "",
-        currentAnagramWord: "",
-        currentIndex: 0,
-
-        gameCurrentScrambleTile: "",
-        gameCurrentTitle: "",
-      };
-    },
-    props: {
-      fullWordList: {
-        type: Array,
-        default: () => ['ollie', 'jess', 'niz', 'win', 'hackathon'], // Use a function for default array values
-      },
-    },
-    mounted() {
-      this.setCurrentAnagramWord();
-    },
-    methods: {
-      scrambleWord(word) {
-        let scrambled = word.split('').sort(() => Math.random() - 0.5).join('');
-        if (scrambled === word) {
-          return this.scrambleWord(word);
-        }
-        return scrambled;
-      },
-      setCurrentAnagramWord() {
-        const word = this.fullWordList[this.currentIndex];
-        this.currentAnagramWord = word;
-
-        this.gameCurrentScrambleTile = this.scrambleWord(word);
-        this.gameCurrentTitle = this.scrambleWord(word);
-
-        document.querySelectorAll('.game__letter').forEach((letter) => {
-          letter.classList.remove('game__letter--used');
-        });
-      },
-      scrambledTitle(word) {
-        return this.scrambleWord(word)
-      },
-      addLetter(letter, event) {
-        event.target.classList.add('game__letter--used');
-      
-        this.currentPlayerWord += letter;
-        this.checkInputs();
-      },
-      checkInputs() {
-        if (
-          this.currentPlayerWord &&
-          this.currentAnagramWord &&
-          this.currentPlayerWord.length === this.currentAnagramWord.length
-        ) {
-          //All letters have been entered
-          if (this.currentPlayerWord === this.currentAnagramWord) {
-            console.log("GOOD!")
-            this.currentIndex++;
-            this.currentPlayerWord = "";
-            this.setCurrentAnagramWord();
-          } else {
-            console.log("BAD!")
-            this.currentPlayerWord = "";
-            this.setCurrentAnagramWord();
-          }
-        }
-      },
-    },
-  });
-  </script>
+ <script lang="js">
+ import { defineComponent } from 'vue';
+ import { useNuxtApp } from '#app';
+ 
+ export default defineComponent({
+   name: 'GameScreen',
+   data() {
+     return {
+       currentPlayerWord: "",
+       currentAnagramWord: "",
+       currentIndex: 0,
+ 
+       gameCurrentScrambleTile: "",
+       gameCurrentTitle: "",
+     };
+   },
+   props: {
+     fullWordList: {
+       type: Array,
+       default: () => ['ollie', 'jess', 'niz', 'win', 'hackathon'], // Default word list
+     },
+   },
+   mounted() {
+     this.setCurrentAnagramWord();
+   },
+   methods: {
+     // Method to scramble a word
+     scrambleWord(word) {
+       let scrambled = word.split('').sort(() => Math.random() - 0.5).join('');
+       if (scrambled === word) {
+         return this.scrambleWord(word);
+       }
+       return scrambled;
+     },
+     // Set the current anagram and scramble the word
+     setCurrentAnagramWord() {
+       const word = this.fullWordList[this.currentIndex];
+       this.currentAnagramWord = word;
+       this.gameCurrentScrambleTile = this.scrambleWord(word);
+       this.gameCurrentTitle = this.scrambleWord(word);
+ 
+       // Reset all letter classes
+       document.querySelectorAll('.game__letter').forEach((letter) => {
+         letter.classList.remove('game__letter--used');
+       });
+     },
+     // Scramble a word
+     scrambledTitle(word) {
+       return this.scrambleWord(word);
+     },
+     // Add letter to the current word
+     addLetter(letter, event) {
+       event.target.classList.add('game__letter--used');
+       this.currentPlayerWord += letter;
+       this.checkInputs();
+     },
+     // Check if the player's input is correct
+     checkInputs() {
+       if (
+         this.currentPlayerWord &&
+         this.currentAnagramWord &&
+         this.currentPlayerWord.length === this.currentAnagramWord.length
+       ) {
+         // All letters have been entered
+         if (this.currentPlayerWord === this.currentAnagramWord) {
+           this.$toast.success('Correct Word!'); // Correct word notification
+           this.currentIndex++;
+           this.currentPlayerWord = "";
+           this.setCurrentAnagramWord();
+         } else {
+           this.$toast.error('Incorrect Word!'); // Incorrect word notification
+           this.currentPlayerWord = "";
+           this.setCurrentAnagramWord();
+         }
+       }
+     },
+   },
+ });
+ </script>
+ 
   
   
   <style lang="scss">
