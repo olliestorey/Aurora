@@ -22,7 +22,7 @@ import { ref } from "vue";
 const runtimeConfig = useRuntimeConfig();
 
 let playersInRoom = ref<string[]>([]);
-let roomCode = ref<string>("AsD73!"); //TODO: get this from global state
+const roomCode = useState<string>("roomCode"); //TODO: get this from global state
 let countdown = ref<number>(5);
 let gameStarting = ref<boolean>(false);
 

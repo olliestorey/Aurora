@@ -44,22 +44,28 @@ namespace Aurora.Web.Controllers
         }
 
         [HttpPost("join")]
-        public IActionResult JoinRoom(string roomCode, string playerName, string playerEmail)
+        public async Task<IActionResult> JoinRoom([FromBody]JoinRoomRequest joinRoomRequest)
         {
-            string[] names = System.IO.File.ReadAllLines("naughtywords.txt");
-            if (names.Contains(playerName))
+            try
             {
-                return BadRequest("Please choose an appropriate name");
+                string[] names = System.IO.File.ReadAllLines("data/naughtywords.txt").Select(x => x.Trim()).ToArray();
+
+                if (names.Contains(joinRoomRequest.PlayerName))
+                    return BadRequest("Please choose an appropriate name");
+            }
+            catch (Exception)
+            {
+                _logger.LogError("Could not read naughty words file");
             }
 
-            if (!IsValidEmail(playerEmail))
-            {
+            if (!IsValidEmail(joinRoomRequest.PlayerEmail))
                 return BadRequest("Invalid email address");
-            }
 
-            var room = _roomService.JoinRoom(roomCode, playerName, playerEmail);
+            var room = _roomService.JoinRoom(joinRoomRequest.RoomCode, joinRoomRequest.PlayerName, joinRoomRequest.PlayerEmail);
 
-            // trigger player joined event
+            var x = new PlayerJoinedGameEvent() { EventMessage = new { PlayerName = joinRoomRequest.PlayerName } };
+            await _eventDispatcherService.DispatchEventAsync(x);
+
             return Ok(room);
         }
 
@@ -74,20 +80,17 @@ namespace Aurora.Web.Controllers
             string pattern = @"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$";
             return Regex.IsMatch(email, pattern);
         }
-
-        [HttpPost]
-        [Route("sigr")]
-        public async Task<bool> Test()
-        {
-            var x = new PlayerJoinedGameEvent() { EventMessage = new { PlayerName = "TestPlaye" } };
-            await _eventDispatcherService.DispatchEventAsync(x);
-
-            return true;
-        }
     }
     public class CreateRoomRequest
     {
         public string RoomCode { get; set; }
         public int NumberOfWordsInGame { get; set; }
+    }
+    public class JoinRoomRequest
+    {
+        public string RoomCode { get; set; }
+
+        public string PlayerName { get; set; }
+        public string PlayerEmail { get;set; }
     }
 }
