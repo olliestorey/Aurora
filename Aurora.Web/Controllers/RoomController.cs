@@ -1,4 +1,5 @@
 ﻿using Aurora.Web.Events;
+using Aurora.Web.Models.RequestDtos;
 using Aurora.Web.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.RegularExpressions;
@@ -85,22 +86,5 @@ namespace Aurora.Web.Controllers
             string pattern = @"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$";
             return Regex.IsMatch(email, pattern);
         }
-    }
-    public class CreateRoomRequest
-    {
-        public string RoomCode { get; set; }
-        public int NumberOfWordsInGame { get; set; }
-        public string? WordList { get; set; }
-    }
-    public class JoinRoomRequest
-    {
-        public string RoomCode { get; set; }
-
-        public string PlayerName { get; set; }
-        public string PlayerEmail { get; set; }
-    }
-    public class StartGameRequest
-    {
-        public string RoomCode { get; set; }
     }
 }

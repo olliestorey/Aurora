@@ -7,6 +7,7 @@
       </div>
     </div>
     <div class="game__controls">
+      <button class="game__skip" @click="skipWord()">Skip</button>
       <div class="game__letter-height">
         <div class="game__letter-container">
           <button
@@ -122,7 +123,11 @@ const jsConfetti = new JSConfetti();
        checkInputs();
      };
 
-    const submitWord = async (word) => {
+     const skipWord = async () => {
+       await submitWord(currentAnagramWord.value, true);
+     };
+
+    const submitWord = async (word, wasSkipped = false) => {
       const response = await fetch(
         `${runtimeConfig.public.apiBase}/api/words/submitWord`,
         {
@@ -134,6 +139,7 @@ const jsConfetti = new JSConfetti();
             roomCode: roomCode.value,
             playerKey: playerKey.value,
             word: word,
+            WordWasSkipped: wasSkipped,
           }),
         }
       );
@@ -201,6 +207,7 @@ const jsConfetti = new JSConfetti();
        addLetter,
        checkInputs,
        clearEntry,
+       skipWord,
        celebrate,
        roomCode, // Make sure to return roomCode to use in the template
      };

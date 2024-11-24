@@ -1,5 +1,7 @@
 ﻿using Aurora.Web.Events;
 using Aurora.Web.Factories;
+using Aurora.Web.Models.RequestDtos;
+using Aurora.Web.Models.ResonseDtos;
 using Aurora.Web.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,7 +16,6 @@ namespace Aurora.Web.Controllers
         private readonly IRoomService _roomService;
         private readonly IEventDispatcherService _eventDispatcherService;
         private readonly IGlobalLeaderboardService _globalLeaderboardService;
-        private readonly int score = 100;
 
         public WordController(ILogger<RoomController> logger, IRoomService roomService, IEventDispatcherService eventDispatcherService, IGlobalLeaderboardService globalLeaderboardService)
         {
@@ -41,65 +42,69 @@ namespace Aurora.Web.Controllers
         public async Task<SubmitWordDto> SubmitWord([FromBody] SubmitWordRequest request)
         {
             var room = _roomService.GetRoomByCode(request.RoomCode.ToString());
-            if (room == null) return new SubmitWordDto(false, null);
+            var player = room?.Players.Find(x => x.Id == request.PlayerKey);
+            int? playerPosition = null;
 
-            var isWordExist = room.Words.Contains(request.Word.ToLower());
+            if (room == null || player == null) throw new BadHttpRequestException("Room or player not found");
+            request.Word = request.Word.ToLower();
 
-            if (isWordExist && room.Players.Find(x => x.Id == request.PlayerKey)?.WordsSubmited.Contains(request.Word) == false)
+            var validWordInGame = room.Words.Contains(request.Word);
+
+            if (validWordInGame && !player.WordsSubmited.Contains(request.Word))
             {
-                var lobbyUpdated = new PlayerScoreUpdatedEvent() { EventMessage = new { Players = room.Players, TotalWords = room.Words.Count() } };
-
-                room.Players.Find(x => x.Id == request.PlayerKey).WordsSubmited.Add(request.Word);
-                room.Players.Find(x => x.Id == request.PlayerKey).Score += score / room.Words.Count;
-
-                await _roomService.UpdateRoom(room);
-
-                if (room.Words.Count == room.Players.Find(x => x.Id == request.PlayerKey).WordsSubmited.Count)
-                {
-                    // Calculate player's position
-                    var players = room.Players.OrderByDescending(x => x.Score).ToList();
-                    var playerPosition = players.FindIndex(x => x.Id == request.PlayerKey) + 1;
-                    var positionPoints = 21 - (playerPosition * 1);
-                    var playerName = room.Players.Find(x => x.Id == request.PlayerKey).Name;
-                    room.Players.Find(x => x.Id == request.PlayerKey).Score += positionPoints;
-
-                    var playerFinished = new PlayerGameCompletedEvent() { EventMessage = new { PlayerName = playerName, Position = playerPosition } };
-
-                    await Task.WhenAll(
-                        Task.Run(() => _roomService.UpdateRoom(room)),
-                        _eventDispatcherService.DispatchEventAsync(lobbyUpdated),
-                        _eventDispatcherService.DispatchEventAsync(playerFinished),
-                        _globalLeaderboardService.AddEntry(playerName, room.Players.Find(x => x.Id == request.PlayerKey).Score, room.Players.Find(x => x.Id == request.PlayerKey).Email)
-                    );
-
-                    return new SubmitWordDto(true, playerPosition);
-                }
-
-                await _eventDispatcherService.DispatchEventAsync(lobbyUpdated);
-
-                return new SubmitWordDto(true, null);
+                player.WordsSubmited.Add(request.Word);
             }
 
-            return new SubmitWordDto(false, null);
+            if (!request.WordWasSkipped)
+            {
+                player.WordsSubmited.Add(request.Word);
+                player.Score += CalculateWordScore(request.Word);
+            }
+
+            room.Players.Remove(room.Players.First(x => x.Id == request.PlayerKey));
+            room.Players.Add(player);
+            room.Players.OrderByDescending(x => x.Score);
+            playerPosition = room.Players.IndexOf(player) + 1;
+
+            await _roomService.UpdateRoom(room);
+
+            // Player has completed the game
+            if (room.Words.Count == player.WordsSubmited.Count)
+            {
+                await Task.WhenAll(
+                    Task.Run(() => _roomService.UpdateRoom(room)),
+                    _eventDispatcherService.DispatchEventAsync(new PlayerGameCompletedEvent() { EventMessage = new { PlayerName = player.Name, Position = playerPosition } }),
+                    _globalLeaderboardService.AddEntry(player.Name, player.Score, player.Email)
+                );
+            }
+
+            var lobbyUpdated = new PlayerScoreUpdatedEvent() { EventMessage = new { Players = room.Players, TotalWords = room.Words.Count() } };
+            await _eventDispatcherService.DispatchEventAsync(lobbyUpdated);
+
+            return new SubmitWordDto(true, playerPosition);
         }
-    }
 
-    public class SubmitWordDto
-    {
-        public bool Result { get; set; }
-        public int? Position { get; set; }
-
-        public SubmitWordDto(bool result, int? position)
+        private int CalculateWordScore(string word)
         {
-            Result = result;
-            Position = position;
-        }
-    }
+            // default is office
+            decimal wordDifficulty = 1;
+            decimal timeDifficulty = 1;
 
-    public class SubmitWordRequest
-    {
-        public string RoomCode { get; set; }
-        public Guid PlayerKey { get; set; }
-        public string Word { get; set; }
+            if (HardcodedWordFactory.CultureWords.Contains(word))
+            {
+                wordDifficulty = 1.2M;
+            }
+            else if (HardcodedWordFactory.DevEasy.Contains(word))
+            {
+                wordDifficulty = 1.4M;
+            }
+            else if (HardcodedWordFactory.DevHard.Contains(word))
+            {
+                wordDifficulty = 1.6M;
+            }
+
+
+            return 100;
+        }
     }
 }

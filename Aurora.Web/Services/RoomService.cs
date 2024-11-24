@@ -98,6 +98,7 @@ namespace Aurora.Web.Services
         public List<string> Words { get; set; }
         public List<Player> Players { get; set; }
 
+        public DateTime StartTime { get; set; }
         public Room()
         {
         }
