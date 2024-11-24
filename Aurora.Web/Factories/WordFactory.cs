@@ -22,7 +22,7 @@
 
             //Office
             var Office = new List<string> {
-                "Ahmed", "Ben", "Colgan", "Buiscuit", "Donut", "Mehdi", "Placements", "Hackathon", "Amber", "Carly",
+                "Niz", "Ben", "Colgan", "Buiscuit", "Donut", "Mehdi", "Placements", "Hackathon", "Amber", "Carly",
                 "Carl", "Spray Tan", "Pub", "Ping Pong", "Darts", "Freya", "Gen Z Marketing", "Polar Bear", "Owen", "Ollie", "Jess",
                 "Coffee", "Diet Coke", "Tea", "Millie", "Heater", "Pokemon", "Minecraft", "Pint", "Beer", "Fridge", "Water",
                 "Slack", "XMas", "Birthday"

@@ -84,7 +84,7 @@ async function createRoom() {
       body: JSON.stringify({
         roomCode: roomCode.value,
         numberOfWordsInGame: numberOfWordsInGame.value,
-        listType: wordListType.value,
+        wordList: wordListType.value,
       }),
     }
   );
