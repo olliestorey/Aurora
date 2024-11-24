@@ -175,6 +175,11 @@ const runtimeConfig = useRuntimeConfig();
 <style lang="scss">
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
 
+html,
+body {
+  overscroll-behavior: none;
+}
+
 html {
   font-family: "Montserrat", sans-serif;
   font-size: large;
