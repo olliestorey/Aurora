@@ -4,7 +4,7 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   runtimeConfig: {
     public: {
-      apiBase: "https://localhost:7049",
+      apiBase: process.env.NUXT_PUBLIC_API_BASE || "https://localhost:7049",
     },
   },
   ssr: false,
