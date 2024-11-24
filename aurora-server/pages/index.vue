@@ -157,6 +157,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 5px;
+    flex:1;
   }
 }
 
