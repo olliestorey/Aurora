@@ -7,15 +7,19 @@
       </div>
     </div>
     <div class="game__controls">
-      <button class="game__skip" @click="skipWord()">Skip</button>
+      <button class="game__skip" @click="skipWord()">
+        Skip
+        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="20" height="20"
+          viewBox="0 0 32 32" xml:space="preserve">
+          <path class="puchipuchi_een"
+            d="M28.448,17.261L15.552,27.739C14.698,28.432,14,28.1,14,27v-6.938l-9.448,7.676  C3.698,28.432,3,28.1,3,27V5c0-1.1,0.698-1.432,1.552-0.739L14,11.937V5c0-1.1,0.698-1.432,1.552-0.739l12.896,10.478  C29.302,15.432,29.302,16.568,28.448,17.261z"
+            fill="#444141" />
+        </svg>
+      </button>
       <div class="game__letter-height">
         <div class="game__letter-container">
-          <button
-            v-for="(letter, index) in gameCurrentScrambleTile"
-            :key="index"
-            class="game__letter"
-            @click="addLetter(letter, $event)"
-          >
+          <button v-for="(letter, index) in gameCurrentScrambleTile" :key="index" class="game__letter"
+            @click="addLetter(letter, $event)">
             {{ letter }}
           </button>
         </div>
@@ -34,23 +38,23 @@ const runtimeConfig = useRuntimeConfig();
 const jsConfetti = new JSConfetti();
 
 
- export default defineComponent({
-   name: 'GameScreen',
-   setup() {
-     const roomCode = useState("roomCode");
-     console.log(roomCode.value);
-     if(!roomCode.value) {
-        navigateTo({ path: "/" });
+export default defineComponent({
+  name: 'GameScreen',
+  setup() {
+    const roomCode = useState("roomCode");
+    console.log(roomCode.value);
+    if (!roomCode.value) {
+      navigateTo({ path: "/" });
     }
-     const playerKey = useState("playerKey");
+    const playerKey = useState("playerKey");
 
-     const fullWordList = ref([]);
+    const fullWordList = ref([]);
 
-     let currentPlayerWord = ref("");
-     const currentAnagramWord = ref("");
-     const currentIndex = ref(0);
-     const gameCurrentScrambleTile = ref("");
-     const gameCurrentTitle = ref("");
+    let currentPlayerWord = ref("");
+    const currentAnagramWord = ref("");
+    const currentIndex = ref(0);
+    const gameCurrentScrambleTile = ref("");
+    const gameCurrentTitle = ref("");
 
     const fetchWordlist = async () => {
       const response = await fetch(`${runtimeConfig.public.apiBase}/api/room?roomCode=${roomCode.value}`)
@@ -86,7 +90,7 @@ const jsConfetti = new JSConfetti();
     };
 
     const celebrate = () => {
-      jsConfetti.addConfetti({emojis: ['🎉', '🧊', '🍌', '🍌', '🧸', '🥳', '😍'],  emojiSize: 40, confettiNumber: 75,});
+      jsConfetti.addConfetti({ emojis: ['🎉', '🧊', '🍌', '🍌', '🧸', '🥳', '😍'], emojiSize: 40, confettiNumber: 75, });
       document.body.classList.add('flash-green');
       setTimeout(() => {
         document.body.classList.remove('flash-green');
@@ -94,7 +98,7 @@ const jsConfetti = new JSConfetti();
     };
 
 
-     const scrambledTitle = (word) => {
+    const scrambledTitle = (word) => {
       let splitWord = word.split('');
       let splitWordIndex = [];
 
@@ -104,28 +108,28 @@ const jsConfetti = new JSConfetti();
           splitWord.splice(i, 1);
         }
       }
-       let scrambled = scrambleWord(splitWord.join(''));
-       scrambled = scrambled.split('');
+      let scrambled = scrambleWord(splitWord.join(''));
+      scrambled = scrambled.split('');
 
-       if (splitWordIndex.length > 0) {
-         for (let i = 0; i < splitWordIndex.length; i++) {
-           scrambled.splice(splitWordIndex[i], 0, ' ');
-         }
-       }
+      if (splitWordIndex.length > 0) {
+        for (let i = 0; i < splitWordIndex.length; i++) {
+          scrambled.splice(splitWordIndex[i], 0, ' ');
+        }
+      }
 
-        return scrambled.join('');
-     };
+      return scrambled.join('');
+    };
 
-     // Add letter to the current word
-     const addLetter = (letter, event) => {
-       event.target.classList.add('game__letter--used');
-       currentPlayerWord.value += letter;
-       checkInputs();
-     };
+    // Add letter to the current word
+    const addLetter = (letter, event) => {
+      event.target.classList.add('game__letter--used');
+      currentPlayerWord.value += letter;
+      checkInputs();
+    };
 
-     const skipWord = async () => {
-       await submitWord(currentAnagramWord.value, true);
-     };
+    const skipWord = async () => {
+      await submitWord(currentAnagramWord.value, true);
+    };
 
     const submitWord = async (word, wasSkipped = false) => {
       const response = await fetch(
@@ -147,23 +151,23 @@ const jsConfetti = new JSConfetti();
       return await response.json();
     }
 
-     // Check if the player's input is correct
-     const checkInputs = async () => {
-       if (
-         currentPlayerWord.value &&
-         currentAnagramWord.value &&
-         currentPlayerWord.value.length === currentAnagramWord.value.length
-       ) {
-         // All letters have been entered
-         if (currentPlayerWord.value === currentAnagramWord.value) {
+    // Check if the player's input is correct
+    const checkInputs = async () => {
+      if (
+        currentPlayerWord.value &&
+        currentAnagramWord.value &&
+        currentPlayerWord.value.length === currentAnagramWord.value.length
+      ) {
+        // All letters have been entered
+        if (currentPlayerWord.value === currentAnagramWord.value) {
           let response = await submitWord(currentPlayerWord.value);
           if (response.result) {
-            if (response.position !== null){
+            if (response.position !== null) {
               $toast.success('Game Complete');
-                useState(
+              useState(
                 "playerPosition",
                 () => response.position
-                );
+              );
               await navigateTo({ path: "/results" });
             } else {
               celebrate();
@@ -175,44 +179,44 @@ const jsConfetti = new JSConfetti();
             $toast.error('Duplicate Word!');
           }
 
-         } else {
-           document.body.classList.add('flash-red');
-      setTimeout(() => {
-        document.body.classList.remove('flash-red');
-      }, 1000);
-           currentPlayerWord.value = "";
-           document.querySelectorAll('.game__letter').forEach((letter) => {
-             letter.classList.remove('game__letter--used');
-           });
-         }
-       }
-     };
+        } else {
+          document.body.classList.add('flash-red');
+          setTimeout(() => {
+            document.body.classList.remove('flash-red');
+          }, 1000);
+          currentPlayerWord.value = "";
+          document.querySelectorAll('.game__letter').forEach((letter) => {
+            letter.classList.remove('game__letter--used');
+          });
+        }
+      }
+    };
 
-     onMounted(async () => {
-       await fetchWordlist();
-       setCurrentAnagramWord();
-     });
+    onMounted(async () => {
+      await fetchWordlist();
+      setCurrentAnagramWord();
+    });
 
-     // Return everything needed for the template to access
-     return {
-       currentPlayerWord,
-       currentAnagramWord,
-       currentIndex,
-       gameCurrentScrambleTile,
-       gameCurrentTitle,
-       fullWordList,
-       scrambleWord,
-       setCurrentAnagramWord,
-       scrambledTitle,
-       addLetter,
-       checkInputs,
-       clearEntry,
-       skipWord,
-       celebrate,
-       roomCode, // Make sure to return roomCode to use in the template
-     };
-   },
- });
+    // Return everything needed for the template to access
+    return {
+      currentPlayerWord,
+      currentAnagramWord,
+      currentIndex,
+      gameCurrentScrambleTile,
+      gameCurrentTitle,
+      fullWordList,
+      scrambleWord,
+      setCurrentAnagramWord,
+      scrambledTitle,
+      addLetter,
+      checkInputs,
+      clearEntry,
+      skipWord,
+      celebrate,
+      roomCode, // Make sure to return roomCode to use in the template
+    };
+  },
+});
 </script>
 
 <style lang="scss">
@@ -239,6 +243,19 @@ body {
   display: flex;
   flex-direction: column;
   gap: 20px;
+
+  &__skip {
+    background-color: rgba(87, 85, 85, 0.52);
+    color: #444141;
+    font-weight: 700;
+    text-transform: uppercase;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 25px;
+    gap: 4px;
+  }
 
   &__controls {
     padding: 20px 20px 40px;
@@ -307,9 +324,11 @@ body {
   0% {
     background-color: white;
   }
+
   50% {
     background-color: rgba(122, 235, 122, 0.623);
   }
+
   100% {
     background-color: white;
   }
@@ -323,9 +342,11 @@ body {
   0% {
     background-color: white;
   }
+
   50% {
     background-color: rgba(235, 139, 122, 0.411);
   }
+
   100% {
     background-color: white;
   }

@@ -73,10 +73,12 @@ connection.start();
 <style lang="scss">
 
 .leaderboard {
-  &-game__score{
-    display: flex;
-    gap: 4px;
-    width: 70%;
+  &-game {
+    &__score{
+      display: flex;
+      gap: 4px;
+      width: 70%;
+    }
   }
 
   &-global{
