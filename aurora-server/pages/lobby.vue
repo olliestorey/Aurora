@@ -22,10 +22,10 @@
     <div class="lobby">
       <h3 class="lobby__code-container cb-yellow">Lobby for Room: <span>{{ roomCode }}</span> </h3>
       
-      <button :disabled="playersInRoom.length === 0" class="cb-button" @click="startGameCountdown()">Start Game</button>
+      <button :disabled="playersInRoom.length === 0" class="cb-button cb-button-start" @click="startGameCountdown()">Start Game</button>
       <div v-if="gameStarting && countdown > 0" class="countdown">
-        <h2 v-if="countdown > 0">Game starting in {{ countdown }}...</h2>
-        <button class="cb-button" @click="cancelStartGame()">Cancel Start</button>
+        <h2 v-if="countdown > 0">Game starting in {{ countdown }}<span class="cb-yellow">...</span></h2>
+        <button class="cb-button cb-button-cancel" @click="cancelStartGame()">Cancel Start</button>
       </div>
       <h2 v-if="playersInRoom.length > 0">Players in Room:</h2>
       <ul class="player-list">
@@ -145,6 +145,12 @@ function cancelStartGame() {
       border-radius: 16px;
       font-size: 40px;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.616);
+    }
+  }
+
+  &:has(.cb-button-cancel) {
+    .cb-button-start {
+      display: none;
     }
   }
 }
