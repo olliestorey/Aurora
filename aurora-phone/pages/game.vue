@@ -69,7 +69,7 @@ const jsConfetti = new JSConfetti();
       const word = fullWordList.value[currentIndex.value];
       currentAnagramWord.value = word;
       gameCurrentScrambleTile.value = scrambleWord(word);
-      gameCurrentTitle.value = scrambleWord(word);
+      gameCurrentTitle.value = scrambledTitle(word);
 
       // Reset all letter classes
       document.querySelectorAll('.game__letter').forEach((letter) => {
@@ -94,8 +94,25 @@ const jsConfetti = new JSConfetti();
 
 
      const scrambledTitle = (word) => {
-      //TODO - Keep spaces consistent
-       return scrambleWord(word);
+      let splitWord = word.split('');
+      let splitWordIndex = [];
+
+      for (let i = 0; i < splitWord.length; i++) {
+        if (splitWord[i] === ' ') {
+          splitWordIndex.push(i);
+          splitWord.splice(i, 1);
+        }
+      }
+       let scrambled = scrambleWord(splitWord.join(''));
+       scrambled = scrambled.split('');
+
+       if (splitWordIndex.length > 0) {
+         for (let i = 0; i < splitWordIndex.length; i++) {
+           scrambled.splice(splitWordIndex[i], 0, ' ');
+         }
+       }
+
+        return scrambled.join('');
      };
 
      // Add letter to the current word
