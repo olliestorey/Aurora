@@ -58,7 +58,9 @@
           placeholder="Enter room code"
         />
 
-        <button @click="submitNewPlayerModel">Join</button>
+        <button style="margin-top: 10px" @click="submitNewPlayerModel">
+          Join
+        </button>
       </div>
     </div>
   </div>
@@ -138,14 +140,15 @@ body {
 .join-room {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 10%;
   align-items: center;
+  padding-top: 8vh;
   width: 100%;
   height: 80vh;
   background: linear-gradient(
-    20deg,
-    rgb(255, 255, 255) 50.9%,
+    13deg,
+    rgb(255, 255, 255) 57.9%,
     rgb(54, 54, 54) 46%
   );
 
@@ -164,7 +167,7 @@ body {
     align-items: center;
     flex-direction: column;
     width: calc(100% - 64px);
-    gap: 16px;
+    gap: 8px;
     padding: 16px 0;
     margin-top: 16px;
   }
@@ -182,7 +185,7 @@ body {
 
   &__form-details {
     display: flex;
-    gap: 20px;
+    gap: 15px;
     margin-bottom: 10px;
     justify-content: center;
 
@@ -211,6 +214,7 @@ input {
   border-radius: 10px;
   background-color: #fff;
   border: 0px;
+  font-size: 1rem;
 }
 
 button {
@@ -219,7 +223,7 @@ button {
   color: #171717;
   width: fit-content;
   font-family: inherit;
-  font-size: 16px;
+  font-size: 1.2rem;
   line-height: 16px;
   border-radius: 5px;
   padding: 13px 26px;

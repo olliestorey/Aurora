@@ -311,6 +311,7 @@ body {
   &__exit {
     color: red;
     text-decoration: none;
+    font-size: 0.7rem;
   }
 
   &__word {
