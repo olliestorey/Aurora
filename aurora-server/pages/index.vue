@@ -192,4 +192,121 @@ body {
   }
 }
 
+
+.leaderboard {
+  &-game__score{
+    display: flex;
+    gap: 4px;
+    width: 70%;
+  }
+
+  &-global{
+      display: flex;
+      color: white;
+      background: rgb(54, 54, 54);
+      margin: 0;
+      border-bottom: 4px solid #e6c300;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+
+    &__entry {
+      background-color: white;
+      margin: 0;
+      padding: 10px;
+      border-radius: 50px;
+      display: flex;
+      align-items: center;
+
+      &-position {
+        padding: 10px;
+        border-radius: 100%;
+        width: 18px;
+        height: 18px;
+        text-align: center;
+        line-height: 18px;
+        font-weight: bolder;
+      }
+
+      &-score {
+        padding: 10px;
+        border-radius: 50px;
+        width: 60px;
+        height: 18px;
+        text-align: center;
+        line-height: 18px;
+        font-weight: bolder;
+        margin-left: auto;
+      }
+
+      &-progress-bar {
+        border-radius: 25px;
+        transition: width 0.3s ease-in-out;
+        align-content: center;
+        text-align: center;
+      }
+
+      &-name {
+        line-height: 40px;
+        text-align: center;
+      }
+    }
+
+    &__details {
+      display: flex;
+      gap: 20px;
+      width: 30%;
+    }
+
+    &__results {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding: 10px;
+      
+      background: rgb(54, 54, 54)
+    }
+
+    &__title {
+      margin: 0;
+      padding-top: 16px;
+    }
+
+    &__back-link {
+      background-color: #e6c300;
+      color: #171717;
+      width: -moz-fit-content;
+      width: fit-content;
+      font-family: inherit;
+      font-size: 16px;
+      line-height: 16px;
+      border-radius: 5px;
+      padding: 13px 26px;
+      border: 0;
+      text-decoration: none;
+      align-self: center;
+      margin: 50px 0;
+      cursor: pointer;
+    }
+  }
+
+  .cb {
+    &-black {
+      color: #171717;
+    }
+
+    &-yellow {
+      color: #e6c300;
+
+      &--bg {
+        background-color: #e6c300;
+      }
+    }
+  }
+}
+
 </style>
