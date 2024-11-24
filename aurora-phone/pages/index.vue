@@ -83,12 +83,8 @@ const playerModel = ref<PlayerModel>({
 });
 
 async function submitNewPlayerModel() {
-  if (
-    playerModel.value.name === "" ||
-    playerModel.value.email === "" ||
-    playerModel.value.roomCode === ""
-  ) {
-    $toast.error("Please fill in all fields");
+  if (playerModel.value.name === "" || playerModel.value.roomCode === "") {
+    $toast.error("Please provide, name and room code");
   } else {
     const response = await fetch(
       `${runtimeConfig.public.apiBase}/api/room/join`,

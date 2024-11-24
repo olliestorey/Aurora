@@ -6,30 +6,33 @@
         <input type="text" :placeholder="currentPlayerWord" disabled />
       </div>
     </div>
-
-    <div class="game__letter-height">
-      <div class="game__letter-container">
-        <button
-          v-for="(letter, index) in gameCurrentScrambleTile"
-          :key="index"
-          class="game__letter"
-          @click="addLetter(letter, $event)"
-        >
-          {{ letter }}
-        </button>
+    <div class="game__controls">
+      <div class="game__letter-height">
+        <div class="game__letter-container">
+          <button
+            v-for="(letter, index) in gameCurrentScrambleTile"
+            :key="index"
+            class="game__letter"
+            @click="addLetter(letter, $event)"
+          >
+            {{ letter }}
+          </button>
+        </div>
       </div>
+      <button class="game__clear" @click="clearEntry()">Clear</button>
     </div>
-    <button class="game__clear" @click="clearEntry()">Clear</button>
-    <!-- <button class="game_pass" @click="skipWord()">Skip</button> -->
   </div>
 </template>
 <script lang="js">
  import { defineComponent, ref, onMounted } from 'vue';
  import { useNuxtApp } from '#app';
+ import JSConfetti from 'js-confetti'
 
  const { $toast } = useNuxtApp();
 
 const runtimeConfig = useRuntimeConfig();
+const jsConfetti = new JSConfetti();
+
 
  export default defineComponent({
    name: 'GameScreen',
@@ -82,6 +85,15 @@ const runtimeConfig = useRuntimeConfig();
       })
     };
 
+    const celebrate = () => {
+      jsConfetti.addConfetti({emojis: ['🎉', '🦄', '🍌', '🍌', '🧸', '🥳', '😍'],  emojiSize: 40, confettiNumber: 75,});
+      document.body.classList.add('flash-green');
+      setTimeout(() => {
+        document.body.classList.remove('flash-green');
+      }, 1000);
+    };
+
+
      const scrambledTitle = (word) => {
       //TODO - Keep spaces consistent
        return scrambleWord(word);
@@ -132,7 +144,7 @@ const runtimeConfig = useRuntimeConfig();
                 );
               await navigateTo({ path: "/results" });
             } else {
-              $toast.success('Correct Word!');
+              celebrate();
               currentIndex.value++;
               currentPlayerWord.value = "";
               setCurrentAnagramWord();
@@ -142,7 +154,10 @@ const runtimeConfig = useRuntimeConfig();
           }
 
          } else {
-           $toast.error('Incorrect Word!');
+           document.body.classList.add('flash-red');
+      setTimeout(() => {
+        document.body.classList.remove('flash-red');
+      }, 1000);
            currentPlayerWord.value = "";
            document.querySelectorAll('.game__letter').forEach((letter) => {
              letter.classList.remove('game__letter--used');
@@ -170,6 +185,7 @@ const runtimeConfig = useRuntimeConfig();
        addLetter,
        checkInputs,
        clearEntry,
+       celebrate,
        roomCode, // Make sure to return roomCode to use in the template
      };
    },
@@ -201,6 +217,19 @@ body {
   flex-direction: column;
   gap: 20px;
 
+  &__controls {
+    padding: 20px 20px 40px;
+  }
+
+  &__clear {
+    width: 100%;
+    background-color: rgb(87, 85, 85);
+    color: white;
+    font-weight: 700;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+
   &__letter {
     cursor: pointer;
     font-weight: 700;
@@ -211,7 +240,7 @@ body {
     &-container {
       display: flex;
       gap: 10px;
-      padding: 20px;
+      padding-bottom: 20px;
       margin-top: 20px;
       flex-wrap: wrap;
     }
@@ -249,5 +278,37 @@ body {
       flex: 1;
     }
   }
+}
+
+@keyframes flashGreen {
+  0% {
+    background-color: white;
+  }
+  50% {
+    background-color: rgba(122, 235, 122, 0.623);
+  }
+  100% {
+    background-color: white;
+  }
+}
+
+.flash-green {
+  animation: flashGreen 0.5s ease-in;
+}
+
+@keyframes flashRed {
+  0% {
+    background-color: white;
+  }
+  50% {
+    background-color: rgba(235, 139, 122, 0.411);
+  }
+  100% {
+    background-color: white;
+  }
+}
+
+.flash-red {
+  animation: flashRed 0.4s ease-in;
 }
 </style>

@@ -93,7 +93,14 @@
           </a>
         </div>
 
-        <button>Apply now!</button>
+        <a
+          class="cb-button"
+          href="https://careers.coldbanana.com/jobs"
+          target="_blank"
+          >Apply now!</a
+        >
+
+        <NuxtLink class="play-again" to="/"> Play Again? </NuxtLink>
       </div>
     </div>
   </div>
@@ -148,5 +155,40 @@ export default defineComponent({
     margin: 0;
     text-shadow: 0 5px 30px rgba(58, 58, 58, 0.38);
   }
+}
+
+.cb-button {
+  background-color: #e6c300;
+  color: #171717;
+  width: -moz-fit-content;
+  width: fit-content;
+  font-family: inherit;
+  font-size: 16px;
+  line-height: 16px;
+  border-radius: 5px;
+  padding: 13px 26px;
+  border: 0;
+  text-decoration: none;
+  align-self: center;
+  cursor: pointer;
+
+  &:hover:not([disabled]) {
+    background-color: #171717;
+    color: #e6c300;
+  }
+
+  &:disabled {
+    background-color: #897401;
+  }
+
+  &-regenerate {
+    border-radius: 25px;
+    font-size: 14px;
+    padding: 10px 12px;
+  }
+}
+
+.play-again {
+  font-size: 0.8rem;
 }
 </style>

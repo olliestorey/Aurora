@@ -58,10 +58,15 @@ namespace Aurora.Web.Controllers
                 _logger.LogError("Could not read naughty words file");
             }
 
-            if (!IsValidEmail(joinRoomRequest.PlayerEmail))
-                return BadRequest("Invalid email address");
+            //if (!IsValidEmail(joinRoomRequest.PlayerEmail))
+            //    return BadRequest("Invalid email address");
 
             var room = _roomService.JoinRoom(joinRoomRequest.RoomCode, joinRoomRequest.PlayerName, joinRoomRequest.PlayerEmail);
+
+            if (room == null)
+            {
+                return BadRequest("Invalid email address");
+            }
 
             var x = new PlayerJoinedGameEvent() { EventMessage = new { PlayerName = joinRoomRequest.PlayerName } };
             await _eventDispatcherService.DispatchEventAsync(x);
