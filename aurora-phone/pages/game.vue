@@ -6,21 +6,22 @@
         <input type="text" :placeholder="currentPlayerWord" disabled />
       </div>
     </div>
-
-    <div class="game__letter-height">
-      <div class="game__letter-container">
-        <button
-          v-for="(letter, index) in gameCurrentScrambleTile"
-          :key="index"
-          class="game__letter"
-          @click="addLetter(letter, $event)"
-        >
-          {{ letter }}
-        </button>
+    <div class="game__controls">
+      <div class="game__letter-height">
+        <div class="game__letter-container">
+          <button
+            v-for="(letter, index) in gameCurrentScrambleTile"
+            :key="index"
+            class="game__letter"
+            @click="addLetter(letter, $event)"
+          >
+            {{ letter }}
+          </button>
+        </div>
       </div>
+      <button class="game__clear" @click="clearEntry()">Clear</button>
+      <!-- <button class="game_pass" @click="skipWord()">Skip</button> -->
     </div>
-    <button class="game__clear" @click="clearEntry()">Clear</button>
-    <!-- <button class="game_pass" @click="skipWord()">Skip</button> -->
   </div>
 </template>
 <script lang="js">
@@ -201,6 +202,19 @@ body {
   flex-direction: column;
   gap: 20px;
 
+  &__controls {
+    padding: 20px 20px 40px;
+  }
+
+  &__clear {
+    width: 100%;
+    background-color: rgb(87, 85, 85);
+    color: white;
+    font-weight: 700;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+
   &__letter {
     cursor: pointer;
     font-weight: 700;
@@ -211,7 +225,7 @@ body {
     &-container {
       display: flex;
       gap: 10px;
-      padding: 20px;
+      padding-bottom: 20px;
       margin-top: 20px;
       flex-wrap: wrap;
     }
