@@ -13,7 +13,7 @@ import * as signalR from "@microsoft/signalr";
 const { $toast } = useNuxtApp();
 const runtimeConfig = useRuntimeConfig();
 const roomCode = useState<string>("roomCode");
-if (roomCode.value === "") {
+if (!roomCode.value) {
   navigateTo({ path: "/" });
 }
 

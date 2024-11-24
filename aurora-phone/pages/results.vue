@@ -41,7 +41,7 @@
 
         <div class="join-room__form-details">
           <a
-            href="https://www.instagram.com/_cold_banana_/?hl=en-gb"
+            href="https://www.instagram.com/coldbananaculture_/?hl=en-gb"
             target="_blank"
           >
             <svg
@@ -99,8 +99,8 @@
   </div>
 </template>
 <script lang="js">
-const roomCode = useState<string>("roomCode");
-if(roomCode.value === "") {
+const roomCode = useState("roomCode");
+if(!roomCode.value) {
   navigateTo({ path: "/" });
 }
 export default defineComponent({
