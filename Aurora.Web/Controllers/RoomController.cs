@@ -41,6 +41,10 @@ namespace Aurora.Web.Controllers
             var x = new GameStartedEvent() { EventMessage = new { RoomCode = request.RoomCode } };
             await _eventDispatcherService.DispatchEventAsync(x);
 
+            var room = _roomService.GetRoomByCode(request.RoomCode);
+
+            if (room != null) room.StartTime = DateTime.Now;
+
             return true;
         }
 
