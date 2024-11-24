@@ -13,6 +13,9 @@ import * as signalR from "@microsoft/signalr";
 const { $toast } = useNuxtApp();
 const runtimeConfig = useRuntimeConfig();
 const roomCode = useState<string>("roomCode");
+if (!roomCode.value) {
+  navigateTo({ path: "/" });
+}
 
 const connection = new signalR.HubConnectionBuilder()
   .withUrl(`${runtimeConfig.public.apiBase}/ws/game`, {
@@ -33,6 +36,11 @@ connection.start().catch((err) => console.error(err.toString()));
 
 <style lang="scss">
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
+
+html,
+body {
+  overscroll-behavior: none;
+}
 
 html {
   font-family: "Montserrat", sans-serif;
