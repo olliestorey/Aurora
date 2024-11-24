@@ -15,10 +15,10 @@
             }.Select(x => x.ToLower()).ToList();
 
         public static List<string> OfficeWords = new List<string> {
-                    "Niz", "Ben", "Colgan", "Buiscuit", "Donut", "Mehdi", "Placements", "Hackathon", "Amber", "Carly",
-                    "Carl", "Spray Tan", "Pub", "Ping Pong", "Darts", "Freya", "Gen Z Marketing", "Polar Bear", "Owen", "Ollie", "Jess",
+                    "Niz", "Ben", "Colgan", "Biscuit", "Donut", "Mehdi", "Placements", "Hackathon", "Amber", "Carly",
+                    "Carl", "Spray Tan", "Pub", "Ping Pong", "Darts", "Freya", "Gen Z", "Bear", "Owen", "Ollie", "Jess",
                     "Coffee", "Diet Coke", "Tea", "Millie", "Heater", "Pokemon", "Minecraft", "Pint", "Beer", "Fridge", "Water",
-                    "Slack", "XMas", "Birthday"
+                    "Slack", "XMas", "Birthday", "Fribbens"
             }.Select(x => x.ToLower()).ToList();
 
         public static List<string> DevHard = new List<string> {
