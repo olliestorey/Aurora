@@ -76,7 +76,7 @@ connection.start();
   &-game__score{
     display: flex;
     gap: 4px;
-    width: 100%;
+    width: 70%;
   }
 
   &-global{
@@ -125,7 +125,6 @@ connection.start();
       &-progress-bar {
         border-radius: 25px;
         transition: width 0.3s ease-in-out;
-        margin-left: 50px;
         align-content: center;
         text-align: center;
       }
@@ -139,7 +138,7 @@ connection.start();
     &__details {
       display: flex;
       gap: 20px;
-      width: min-content;
+      width: 30%;
     }
 
     &__results {
@@ -170,6 +169,7 @@ connection.start();
       text-decoration: none;
       align-self: center;
       margin: 50px 0;
+      cursor: pointer;
     }
   }
 
