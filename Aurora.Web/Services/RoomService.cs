@@ -12,7 +12,7 @@ namespace Aurora.Web.Services
             _memoryCache = memoryCache;
         }
 
-        public async Task<Room> CreateRoom(string roomCode, int numberOfWordsInGame)
+        public async Task<Room> CreateRoom(string roomCode, int numberOfWordsInGame, string? wordList)
         {
             var wordsFactory = new HardcodedWordFactory();
             var room = new Room()
@@ -22,7 +22,7 @@ namespace Aurora.Web.Services
                 Players = []
             };
 
-            var words = await wordsFactory.GetWords();
+            var words = await wordsFactory.GetWords(wordList);
             room.Words = words.OrderBy(x => Guid.NewGuid()).Take(numberOfWordsInGame).ToList();
             var cacheKey = $"room_{room.Code}";
             _memoryCache.Set(cacheKey, room, TimeSpan.FromMinutes(30));
@@ -121,7 +121,7 @@ namespace Aurora.Web.Services
 
     public interface IRoomService
     {
-        public Task<Room> CreateRoom(string roomCode, int numberOfWordsInGame);
+        public Task<Room> CreateRoom(string roomCode, int numberOfWordsInGame, string? wordList);
         public Room? GetRoomByCode(string code);
         public Room JoinRoom(string roomCode, string playerName, string playerEmail);
         public Task UpdateRoom(Room room);

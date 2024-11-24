@@ -28,11 +28,11 @@ namespace Aurora.Web.Controllers
         /// <param name="roomKey"></param>
         /// <returns></returns>
         [HttpGet("/getwords/{roomKey}")]
-        public async Task<IEnumerable<string>> GetWords(string roomKey)
+        public async Task<IEnumerable<string>> GetWords(string roomKey, string? listType)
         {
             var wordFactory = new HardcodedWordFactory();
 
-            return await wordFactory.GetWords();
+            return await wordFactory.GetWords(listType);
         }
 
         [HttpPost("submitWord")]

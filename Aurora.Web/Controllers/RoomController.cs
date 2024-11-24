@@ -29,7 +29,7 @@ namespace Aurora.Web.Controllers
         [HttpPost("create")]
         public async Task<string> CreateRoom([FromBody] CreateRoomRequest request)
         {
-            var newRoom = await _roomService.CreateRoom(request.RoomCode, request.NumberOfWordsInGame);
+            var newRoom = await _roomService.CreateRoom(request.RoomCode, request.NumberOfWordsInGame, request.WordList);
 
             return newRoom.Code;
         }
@@ -85,6 +85,7 @@ namespace Aurora.Web.Controllers
     {
         public string RoomCode { get; set; }
         public int NumberOfWordsInGame { get; set; }
+        public string? WordList { get; set; }
     }
     public class JoinRoomRequest
     {
