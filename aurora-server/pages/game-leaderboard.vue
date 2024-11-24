@@ -31,7 +31,7 @@
         <div class="leaderboard-game__score">
           <div class="leaderboard-global__entry-progress-bar cb-yellow--bg"
             :style="{ width: (entry.wordsSubmited.length / gameLobby.totalWords) * 100 + '%' }">
-            {{ (entry.wordsSubmited.length / gameLobby.totalWords) !== 0 ? (entry.wordsSubmited.length / gameLobby.totalWords) * 100 + '%' : '' }}
+            {{ (entry.wordsSubmited.length / gameLobby.totalWords) !== 0 ? Math.floor((entry.wordsSubmited.length / gameLobby.totalWords) * 100 )+ '%' : '' }}
           </div>
 
           <span class="leaderboard-global__entry-score cb-yellow--bg">
