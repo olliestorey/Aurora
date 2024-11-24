@@ -7,7 +7,10 @@
       </div>
     </div>
     <div class="game__controls">
-      <button class="game__skip" @click="skipWord()">Skip</button>
+      <div style="display: flex">
+        <button class="game__skip" @click="skipWord()">Skip</button>
+        <a style="color: red" href="/">Exit?</a>
+      </div>
       <div class="game__letter-height">
         <div class="game__letter-container">
           <button
@@ -252,7 +255,8 @@ body {
 
 .game {
   width: 100%;
-  height: 100vh;
+  height: 90vh;
+  padding: 0 0 20px;
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -309,7 +313,7 @@ body {
     text-align: center;
     width: 100%;
     margin: 0;
-    padding: 20px 0;
+    padding: 40px 0;
     background-color: rgb(54, 54, 54);
     margin-bottom: 20px;
 

@@ -51,7 +51,6 @@
             placeholder="Enter your email"
           />
         </div>
-
         <input
           type="text"
           class="cb-yellow join-room__code"
@@ -126,11 +125,6 @@ async function submitNewPlayerModel() {
 <style lang="scss">
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap");
 
-html,
-body {
-  overscroll-behavior: none;
-}
-
 html {
   font-family: "Montserrat", sans-serif;
   font-size: large;
@@ -151,7 +145,7 @@ body {
   height: 100vh;
   background: linear-gradient(
     20deg,
-    rgb(255, 255, 255) 46.9%,
+    rgb(255, 255, 255) 50.9%,
     rgb(54, 54, 54) 46%
   );
 
@@ -190,6 +184,12 @@ body {
     display: flex;
     gap: 20px;
     margin-bottom: 10px;
+    justify-content: center;
+
+    @media screen and (max-width: 450px) {
+      flex-direction: column;
+      width: 80vw;
+    }
   }
 
   &__code {

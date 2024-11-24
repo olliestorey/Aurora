@@ -115,13 +115,13 @@ if(!roomCode.value) {
 }
 
 let count = 0;
-const maxTriggers = 10;
+const maxTriggers = 20;
 
 const intervalId = setInterval(() => {
   jsConfetti.addConfetti({
     emojis: ['🎉', '🧊', '🍌', '🍌', '🧸', '🥳', '😍'],
     emojiSize: 70,
-    confettiNumber: 50,
+    confettiNumber: 60,
   });
 
   if (++count >= maxTriggers) {
