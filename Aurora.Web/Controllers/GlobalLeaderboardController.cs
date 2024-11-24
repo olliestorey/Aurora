@@ -32,7 +32,7 @@ namespace Aurora.Web.Controllers
 
         public Leaderboard(IEnumerable<LeaderboardEntry> ldbEntry)
         {
-            Entries = ldbEntry.Select(x => new Entry(x)).OrderBy(x => x.Score).Select((e, i) => { e.Position = i; return e; }).ToList() ?? new List<Entry>();
+            Entries = ldbEntry.Select(x => new Entry(x)).OrderByDescending(x => x.Score).Select((e, i) => { e.Position = i; return e; }).ToList() ?? new List<Entry>();
         }
     }
 

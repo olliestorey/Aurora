@@ -4,8 +4,8 @@
       <div class="join-room__header">
         <div class="join-room__cb">
           <svg
-            width="225"
-            height="132"
+            width="150"
+            height="100"
             viewBox="0 0 75 44"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -142,7 +142,7 @@ body {
   gap: 10%;
   align-items: center;
   width: 100%;
-  height: 100vh;
+  height: 80vh;
   background: linear-gradient(
     20deg,
     rgb(255, 255, 255) 50.9%,

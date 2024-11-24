@@ -7,9 +7,9 @@
       </div>
     </div>
     <div class="game__controls">
-      <div style="display: flex">
+      <div style="display: flex; justify-content: space-between">
         <button class="game__skip" @click="skipWord()">Skip</button>
-        <a style="color: red" href="/">Exit?</a>
+        <a class="game__exit" href="/">Exit?</a>
       </div>
       <div class="game__letter-height">
         <div class="game__letter-container">
@@ -41,7 +41,6 @@ export default defineComponent({
   name: 'GameScreen',
   setup() {
     const roomCode = useState("roomCode");
-    console.log(roomCode.value);
     if (!roomCode.value) {
       navigateTo({ path: "/" });
     }
@@ -307,6 +306,11 @@ body {
       background-color: grey;
       color: rgb(54, 54, 54);
     }
+  }
+
+  &__exit {
+    color: red;
+    text-decoration: none;
   }
 
   &__word {
