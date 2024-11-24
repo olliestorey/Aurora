@@ -20,7 +20,6 @@
         </div>
       </div>
       <button class="game__clear" @click="clearEntry()">Clear</button>
-      <button class="game_pass" @click="celebrate()">Skip</button>
     </div>
   </div>
 </template>
@@ -145,7 +144,7 @@ const jsConfetti = new JSConfetti();
                 );
               await navigateTo({ path: "/results" });
             } else {
-              $toast.success('Correct Word!');
+              celebrate();
               currentIndex.value++;
               currentPlayerWord.value = "";
               setCurrentAnagramWord();
