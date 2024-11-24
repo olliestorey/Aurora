@@ -114,8 +114,19 @@ if(!roomCode.value) {
   navigateTo({ path: "/" });
 }
 
-setInterval(() => {
-  jsConfetti.addConfetti({emojis: ['🎉', '🧊', '🍌', '🍌', '🧸', '🥳', '😍'],  emojiSize: 30, confettiNumber: 100,});
+let count = 0;
+const maxTriggers = 10;
+
+const intervalId = setInterval(() => {
+  jsConfetti.addConfetti({
+    emojis: ['🎉', '🧊', '🍌', '🍌', '🧸', '🥳', '😍'],
+    emojiSize: 70,
+    confettiNumber: 50,
+  });
+
+  if (++count >= maxTriggers) {
+    clearInterval(intervalId);
+  }
 }, 1000);
 
 export default defineComponent({

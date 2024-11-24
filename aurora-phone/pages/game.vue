@@ -7,19 +7,15 @@
       </div>
     </div>
     <div class="game__controls">
-      <button class="game__skip" @click="skipWord()">
-        Skip
-        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="20" height="20"
-          viewBox="0 0 32 32" xml:space="preserve">
-          <path class="puchipuchi_een"
-            d="M28.448,17.261L15.552,27.739C14.698,28.432,14,28.1,14,27v-6.938l-9.448,7.676  C3.698,28.432,3,28.1,3,27V5c0-1.1,0.698-1.432,1.552-0.739L14,11.937V5c0-1.1,0.698-1.432,1.552-0.739l12.896,10.478  C29.302,15.432,29.302,16.568,28.448,17.261z"
-            fill="#444141" />
-        </svg>
-      </button>
+      <button class="game__skip" @click="skipWord()">Skip</button>
       <div class="game__letter-height">
         <div class="game__letter-container">
-          <button v-for="(letter, index) in gameCurrentScrambleTile" :key="index" class="game__letter"
-            @click="addLetter(letter, $event)">
+          <button
+            v-for="(letter, index) in gameCurrentScrambleTile"
+            :key="index"
+            class="game__letter"
+            @click="addLetter(letter, $event)"
+          >
             {{ letter }}
           </button>
         </div>
@@ -90,7 +86,7 @@ export default defineComponent({
     };
 
     const celebrate = () => {
-      jsConfetti.addConfetti({ emojis: ['🎉', '🧊', '🍌', '🍌', '🧸', '🥳', '😍'], emojiSize: 40, confettiNumber: 75, });
+      jsConfetti.addConfetti({emojis: ['🎉', '🧊', '🍌', '🍌', '🧸', '🥳', '😍'],  emojiSize: 60, confettiNumber: 25,});
       document.body.classList.add('flash-green');
       setTimeout(() => {
         document.body.classList.remove('flash-green');
