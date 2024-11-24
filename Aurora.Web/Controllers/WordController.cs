@@ -4,6 +4,7 @@ using Aurora.Web.Models.RequestDtos;
 using Aurora.Web.Models.ResonseDtos;
 using Aurora.Web.Services;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace Aurora.Web.Controllers
 {
@@ -61,6 +62,14 @@ namespace Aurora.Web.Controllers
                 player.Score += CalculateWordScore(request.Word);
             }
 
+            // Player has completed the game
+            bool playerFinished = room.Words.Count == player.WordsSubmited.Count;
+
+            if (playerFinished)
+            {
+                player.Score += (int)(1000 - (DateTime.Now - room.StartTime).TotalSeconds);
+            }
+
             room.Players.Remove(room.Players.First(x => x.Id == request.PlayerKey));
             room.Players.Add(player);
             room.Players.OrderByDescending(x => x.Score);
@@ -68,8 +77,7 @@ namespace Aurora.Web.Controllers
 
             await _roomService.UpdateRoom(room);
 
-            // Player has completed the game
-            if (room.Words.Count == player.WordsSubmited.Count)
+            if (playerFinished)
             {
                 await Task.WhenAll(
                     Task.Run(() => _roomService.UpdateRoom(room)),
@@ -86,25 +94,15 @@ namespace Aurora.Web.Controllers
 
         private int CalculateWordScore(string word)
         {
-            // default is office
-            decimal wordDifficulty = 1;
-            decimal timeDifficulty = 1;
-
-            if (HardcodedWordFactory.CultureWords.Contains(word))
+            decimal wordDifficulty = word switch
             {
-                wordDifficulty = 1.2M;
-            }
-            else if (HardcodedWordFactory.DevEasy.Contains(word))
-            {
-                wordDifficulty = 1.4M;
-            }
-            else if (HardcodedWordFactory.DevHard.Contains(word))
-            {
-                wordDifficulty = 1.6M;
-            }
+                var w when HardcodedWordFactory.CultureWords.Contains(w) => 1.2M,
+                var w when HardcodedWordFactory.DevEasy.Contains(w) => 1.4M,
+                var w when HardcodedWordFactory.DevHard.Contains(w) => 1.6M,
+                _ => 1.0M // Default difficulty
+            };
 
-
-            return 100;
+            return (int)Math.Round((8 + word.Length) * wordDifficulty * 5);
         }
     }
 }
