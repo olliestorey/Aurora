@@ -53,3 +53,15 @@ async function createRoom() {
   }
 }
 </script>
+<style lang="scss">
+  html {
+    font-family: 'Montserrat', sans-serif;
+    font-size: large;
+    background-color: rgb(54, 54, 54);
+  }
+  
+  body {
+    margin: 0;
+    padding: 0;
+  }
+</style>

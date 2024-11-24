@@ -26,6 +26,7 @@
 <script lang="js">
  import { defineComponent, ref, onMounted } from 'vue';
  import { useNuxtApp } from '#app';
+
  const { $toast } = useNuxtApp();
 
 const runtimeConfig = useRuntimeConfig();
@@ -38,7 +39,7 @@ const runtimeConfig = useRuntimeConfig();
 
      const fullWordList = ref([]);
 
-     const currentPlayerWord = ref("");
+     let currentPlayerWord = ref("");
      const currentAnagramWord = ref("");
      const currentIndex = ref(0);
      const gameCurrentScrambleTile = ref("");
@@ -71,7 +72,7 @@ const runtimeConfig = useRuntimeConfig();
     };
 
     const clearEntry = () => {
-      this.currentPlayerWord = "";
+      currentPlayerWord.value = "";
       document.querySelectorAll('.game__letter').forEach((letter) => {
         letter.classList.remove('game__letter--used');
       })
@@ -121,10 +122,10 @@ const runtimeConfig = useRuntimeConfig();
           if (response.result) {
             if (response.position !== null){
               $toast.success('Game Complete');
-              useState(
+                useState(
                 "playerPosition",
                 () => response.position
-              );
+                );
               await navigateTo({ path: "/results" });
             } else {
               $toast.success('Correct Word!');
@@ -164,6 +165,7 @@ const runtimeConfig = useRuntimeConfig();
        scrambledTitle,
        addLetter,
        checkInputs,
+       clearEntry,
        roomCode, // Make sure to return roomCode to use in the template
      };
    },
