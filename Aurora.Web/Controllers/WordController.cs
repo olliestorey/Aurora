@@ -62,7 +62,7 @@ namespace Aurora.Web.Controllers
             }
 
             // Player has completed the game
-            bool playerFinished = room.Words.Count >= player.WordsSubmited.Count;
+            bool playerFinished = room.Words.Count <= player.WordsSubmited.Count;
 
             if (playerFinished)
             {
@@ -76,7 +76,7 @@ namespace Aurora.Web.Controllers
 
             if (playerFinished)
             {
-                playerPosition = room.Players.Count(x => x.Finished) + 1;
+                playerPosition = room.Players.Count(x => x.Finished);
             }
 
             await _roomService.UpdateRoom(room);
