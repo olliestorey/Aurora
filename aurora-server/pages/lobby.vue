@@ -20,7 +20,7 @@
       <h1>Waiting Lobby</h1>
     </div>
     <div class="lobby">
-      <h1>Lobby for Room: <span class="cb-yellow">{{ roomCode }}</span> </h1>
+      <h3 class="lobby__code-container cb-yellow">Lobby for Room: <span>{{ roomCode }}</span> </h3>
       
       <button :disabled="playersInRoom.length === 0" class="cb-button" @click="startGameCountdown()">Start Game</button>
       <div v-if="gameStarting && countdown > 0" class="countdown">
@@ -129,8 +129,24 @@ function cancelStartGame() {
   flex-direction: column;
   align-items: center;
   gap: 8px;
-  color: white;
+  color: #fff;
   margin: 50px 0;
+
+  &__code-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    & span {
+      background-color: #fff;
+      color: #000000;
+      padding: 20px;
+      margin: 8px;
+      border-radius: 16px;
+      font-size: 40px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.616);
+    }
+  }
 }
 
 .player-list {
