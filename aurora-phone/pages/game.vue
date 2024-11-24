@@ -1,7 +1,7 @@
 <template>
   <div class="game">
     <div class="game__word-container">
-      <h1 class="game__word cb-yellow">{{ gameCurrentTitle }}</h1>
+      <h1 class="game__word cb-yellow">{{ gameCurrentTitle.toUpperCase() }}</h1>
       <div class="game__word-entered">
         <input type="text" :placeholder="currentPlayerWord" disabled />
       </div>
@@ -24,12 +24,11 @@
   </div>
 </template>
 <script lang="js">
- import { defineComponent, ref, onMounted } from 'vue';
- import { useNuxtApp } from '#app';
- import JSConfetti from 'js-confetti'
+import { defineComponent, ref, onMounted } from 'vue';
+import { useNuxtApp } from '#app';
+import JSConfetti from 'js-confetti'
 
- const { $toast } = useNuxtApp();
-
+const { $toast } = useNuxtApp();
 const runtimeConfig = useRuntimeConfig();
 const jsConfetti = new JSConfetti();
 
