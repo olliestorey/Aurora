@@ -126,10 +126,22 @@ export default defineComponent({
     };
 
     const skipWord = async () => {
-      await submitWord(currentAnagramWord.value, true);
-      currentIndex.value++;
+      let response = await submitWord(currentAnagramWord.value, true);
+          if (response.result) {
+            if (response.position !== null) {
+              $toast.success('Game Complete');
+              useState(
+                "playerPosition",
+                () => response.position
+              );
+              await navigateTo({ path: "/results" });
+            } else {
+              jsConfetti.addConfetti({emojis: ['😭', '👎', '❌'],  emojiSize: 60, confettiNumber: 25,});
+              currentIndex.value++;
               currentPlayerWord.value = "";
               setCurrentAnagramWord();
+            }
+          }
     };
 
     const submitWord = async (word, wasSkipped = false) => {
