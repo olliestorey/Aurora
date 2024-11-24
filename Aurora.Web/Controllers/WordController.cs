@@ -73,7 +73,11 @@ namespace Aurora.Web.Controllers
             room.Players.Remove(room.Players.First(x => x.Id == request.PlayerKey));
             room.Players.Add(player);
             room.Players.OrderByDescending(x => x.Score);
-            playerPosition = room.Players.IndexOf(player) + 1;
+
+            if (playerFinished)
+            {
+                playerPosition = room.Players.IndexOf(player) + 1;
+            }
 
             await _roomService.UpdateRoom(room);
 
