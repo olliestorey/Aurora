@@ -163,6 +163,9 @@ function cancelStartGame() {
   color: white;
   text-align: center;
   font-size: 22px;
+  background: #e6c30054;
+  border: 1px solid #e6c300;
+  border-radius: 6px;
 }
 
 .countdown {
