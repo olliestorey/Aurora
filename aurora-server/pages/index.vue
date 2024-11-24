@@ -17,17 +17,34 @@
             fill="#E6C300"></path>
         </svg>
       </div>
-      <h1>Welcome To Cold Bananagram</h1>
+      <h1>Welcome To Cold <span class="cb-yellow">Bananagram</span></h1>
     </div>
+    
     <div class="room">
+
       <div class="room-code">
         <h1>Room Code: {{ roomCode }}</h1>
         <button class="cb-button cb-button-regenerate" @click="regenRoomCode()">Regeneratate</button>
       </div>
+
       <div class="room-words">
-        Number of words
-        <input type="number" v-model="numberOfWordsInGame" />
+        <div class="room-words__options">        
+          Number of words
+          <input type="number" v-model="numberOfWordsInGame" />
+        </div>
+
+        <div class="room-words__options">        
+          Word List Type
+          <select class="room-words-list" v-model="wordListType">
+            <option value=""> Mixed </option>
+            <option value="Culture"> Culture </option>
+            <option value="Office"> Office </option>
+            <option value="DevHard"> Developer - Hard </option>
+            <option value="DevEasy"> Developer - Easy </option>
+          </select>
+        </div>
       </div>
+     
       <button class="cb-button" @click="createRoom()">Create Room</button>
     </div>
   </div>
@@ -38,6 +55,7 @@ import { ref, onMounted } from "vue";
 
 const roomCode = useState<string>("roomCode", () => genCode());
 const numberOfWordsInGame = ref<number>(1);
+const wordListType = ref<string>("");
 const runtimeConfig = useRuntimeConfig();
 
 function regenRoomCode() {
@@ -66,6 +84,7 @@ async function createRoom() {
       body: JSON.stringify({
         roomCode: roomCode.value,
         numberOfWordsInGame: numberOfWordsInGame.value,
+        listType: wordListType.value,
       }),
     }
   );
@@ -120,11 +139,24 @@ body {
   gap: 10px;
 
   input {
-    width: 50px;
+    width: calc(100% - 10px);
     padding: 5px;
     border-radius: 20px;
     border: 1px solid #e6c300;
     background-color: #ecf0f1;
+  }
+
+  &-list {
+    padding: 5px;
+    border-radius: 20px;
+    border: 1px solid #e6c300;
+    background-color: #ecf0f1;
+  }
+
+  &__options {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
   }
 }
 

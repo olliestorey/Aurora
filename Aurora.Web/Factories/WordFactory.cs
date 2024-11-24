@@ -20,6 +20,14 @@
                 "teamwork", "communication", "creativity"
             };
 
+            //Office
+            var Office = new List<string> {
+                "Ahmed", "Ben", "Colgan", "Buiscuit", "Donut", "Mehdi", "Placements", "Hackathon", "Amber", "Carly",
+                "Carl", "Spray Tan", "Pub", "Ping Pong", "Darts", "Freya", "Gen Z Marketing", "Polar Bear", "Owen", "Ollie", "Jess",
+                "Coffee", "Diet Coke", "Tea", "Millie", "Heater", "Pokemon", "Minecraft", "Pint", "Beer", "Fridge", "Water",
+                "Slack", "XMas", "Birthday"
+            };
+
             //Dev Hard
             var DevHard = new List<string> {
                 "algorithm", "backend", "frontend", "refactor", "recursion", "repository", "inheritance", "constructor", "iteration", "namespace",
@@ -42,6 +50,7 @@
             return listType switch
             {
                 "Culture" => Task.FromResult((IEnumerable<string>)Culture),
+                "Office" => Task.FromResult((IEnumerable<string>)Office),
                 "DevHard" => Task.FromResult((IEnumerable<string>)DevHard),
                 "DevEasy" => Task.FromResult((IEnumerable<string>)DevEasy),
                 _ => Task.FromResult((IEnumerable<string>)allWords.OrderBy(x => random.Next()).Take(35).ToList())
