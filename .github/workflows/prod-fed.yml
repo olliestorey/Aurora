@@ -21,7 +21,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '20.12.0'
+          node-version: "20.12.0"
 
       - name: Install dependencies
         run: |
@@ -48,4 +48,4 @@ jobs:
           elif [ "${{ matrix.project }}" == "aurora-server" ]; then
             NETLIFY_SITE_ID=${{ secrets.NETLIFY_SITE_ID_AURORA_SERVER }}
           fi
-          netlify deploy --prod --dir=dist --site=$NETLIFY_SITE_ID
+          netlify deploy --auth={{secrets.NETLIFY_AUTH_TOKEN}} --prod --dir=dist --site=$NETLIFY_SITE_ID 

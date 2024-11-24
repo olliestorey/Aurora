@@ -1,5 +1,4 @@
-﻿using Aurora.Web.Data;
-using Aurora.Web.Events;
+﻿using Aurora.Web.Events;
 using Aurora.Web.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.RegularExpressions;
@@ -36,7 +35,7 @@ namespace Aurora.Web.Controllers
         }
 
         [HttpPost("startgame")]
-        public async Task<bool> StartGame([FromBody]StartGameRequest request)
+        public async Task<bool> StartGame([FromBody] StartGameRequest request)
         {
             var x = new GameStartedEvent() { EventMessage = new { RoomCode = request.RoomCode } };
             await _eventDispatcherService.DispatchEventAsync(x);
@@ -45,7 +44,7 @@ namespace Aurora.Web.Controllers
         }
 
         [HttpPost("join")]
-        public async Task<IActionResult> JoinRoom([FromBody]JoinRoomRequest joinRoomRequest)
+        public async Task<IActionResult> JoinRoom([FromBody] JoinRoomRequest joinRoomRequest)
         {
             try
             {
@@ -70,7 +69,7 @@ namespace Aurora.Web.Controllers
             return Ok(room);
         }
 
-        [HttpDelete()]
+        [HttpDelete]
         public bool DeleteRoom(string roomCode)
         {
             return _roomService.DeleteRoom(roomCode);
@@ -92,7 +91,7 @@ namespace Aurora.Web.Controllers
         public string RoomCode { get; set; }
 
         public string PlayerName { get; set; }
-        public string PlayerEmail { get;set; }
+        public string PlayerEmail { get; set; }
     }
     public class StartGameRequest
     {
