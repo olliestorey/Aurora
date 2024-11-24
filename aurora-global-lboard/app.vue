@@ -9,9 +9,9 @@
     </div>
 
     <div class="leaderboard-global__results">
-      <p v-for="entry in leaderboard.entries" :key="entry.position" class="leaderboard-global__entry cb-black">
+      <p v-for="(entry, index) in leaderboard.entries.reverse()" :key="entry.position" class="leaderboard-global__entry cb-black">
         <div class="leaderboard-global__details">
-          <span class="leaderboard-global__entry-position cb-yellow--bg"> {{ entry.position + 1 }} </span>
+          <span class="leaderboard-global__entry-position cb-yellow--bg"> {{ index + 1 }} </span>
           <span class="leaderboard-global__entry-name"> {{ entry.name }} </span>
         </div>
         <span class="leaderboard-global__entry-score cb-yellow--bg"> {{ entry.score }} </span>

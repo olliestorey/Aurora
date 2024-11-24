@@ -115,7 +115,7 @@ if(!roomCode.value) {
 }
 
 setInterval(() => {
-  jsConfetti.addConfetti({emojis: ['🎉', '🦄', '🍌', '🍌', '🧸', '🥳', '😍'],  emojiSize: 30, confettiNumber: 125,});
+  jsConfetti.addConfetti({emojis: ['🎉', '🧊', '🍌', '🍌', '🧸', '🥳', '😍'],  emojiSize: 30, confettiNumber: 100,});
 }, 1000);
 
 export default defineComponent({
