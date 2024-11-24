@@ -21,7 +21,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '20.12.0'
+          node-version: "20.12.0"
 
       - name: Install dependencies
         run: |
@@ -42,10 +42,9 @@ jobs:
         run: |
           cd ${{ matrix.project }}
           if [ "${{ matrix.project }}" == "aurora-global-lboard" ]; then
-            NETLIFY_SITE_ID=${{ secrets.NETLIFY_SITE_ID_AURORA_GLOBAL_LBOARD }}
+             netlify deploy --auth={{secrets.NETLIFY_AUTH_TOKEN}} --prod --dir=dist --site=${{ secrets.NETLIFY_SITE_ID_AURORA_GLOBAL_LBOARD }} 
           elif [ "${{ matrix.project }}" == "aurora-phone" ]; then
-            NETLIFY_SITE_ID=${{ secrets.NETLIFY_SITE_ID_AURORA_PHONE }}
+              netlify deploy --auth={{secrets.NETLIFY_AUTH_TOKEN}} --prod --dir=dist --site=${{ secrets.NETLIFY_SITE_ID_AURORA_PHONE }} 
           elif [ "${{ matrix.project }}" == "aurora-server" ]; then
-            NETLIFY_SITE_ID=${{ secrets.NETLIFY_SITE_ID_AURORA_SERVER }}
+                netlify deploy --auth={{secrets.NETLIFY_AUTH_TOKEN}} --prod --dir=dist --site=${{ secrets.NETLIFY_SITE_ID_AURORA_SERVER }} 
           fi
-          netlify deploy --prod --dir=dist --site=$NETLIFY_SITE_ID
