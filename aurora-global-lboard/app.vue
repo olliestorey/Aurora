@@ -46,7 +46,7 @@ onMounted(async () => {
   const response = await useFetch(
     `${runtimeConfig.public.apiBase}/api/globalleaderboard`
   );
-  leaderboard = response;
+  leaderboard.value = response;
 });
 </script>
 
@@ -117,7 +117,7 @@ onMounted(async () => {
   &__details {
     display: flex;
     gap: 20px;
-    width: min-content;
+    width: fit-content;
   }
 
   &__results {
