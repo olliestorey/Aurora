@@ -30,7 +30,8 @@
         </div>
 
         <h1 class="join-room__cb-title">
-          Cold <span class="cb-yellow">Bananagram</span>
+          <span style="color: #fff">Cold</span>
+          <span class="cb-yellow"> Bananagram</span>
         </h1>
       </div>
 
@@ -39,7 +40,7 @@
       <div class="join-room__functions">
         <h2 class="join-room__text">Keep in touch</h2>
 
-        <div class="join-room__form-details">
+        <div class="join-room__form-details" style="flex-direction: row">
           <a
             href="https://www.instagram.com/coldbananaculture_/?hl=en-gb"
             target="_blank"

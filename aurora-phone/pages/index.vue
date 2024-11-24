@@ -143,14 +143,14 @@ body {
   justify-content: flex-start;
   gap: 10%;
   align-items: center;
-  padding-top: 8vh;
+  padding-top: 6vh;
   width: 100%;
   height: 80vh;
-  background: linear-gradient(
-    13deg,
-    rgb(255, 255, 255) 57.9%,
-    rgb(54, 54, 54) 46%
-  );
+  // background: linear-gradient(
+  //   13deg,
+  //   rgb(255, 255, 255) 57.9%,
+  //   rgb(54, 54, 54) 46%
+  // );
 
   &__cb {
     display: flex;
@@ -158,7 +158,7 @@ body {
 
     &-title {
       text-align: center;
-      color: #fff;
+      color: #000;
     }
   }
 
