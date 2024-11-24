@@ -85,7 +85,7 @@ const jsConfetti = new JSConfetti();
     };
 
     const celebrate = () => {
-      jsConfetti.addConfetti({emojis: ['🎉', '🦄', '🍌', '🍌', '🧸', '🥳', '😍'],  emojiSize: 40, confettiNumber: 75,});
+      jsConfetti.addConfetti({emojis: ['🎉', '🧊', '🍌', '🍌', '🧸', '🥳', '😍'],  emojiSize: 40, confettiNumber: 75,});
       document.body.classList.add('flash-green');
       setTimeout(() => {
         document.body.classList.remove('flash-green');
