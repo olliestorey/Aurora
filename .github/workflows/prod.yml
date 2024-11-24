@@ -40,11 +40,11 @@ jobs:
           echo ${{secrets.PROD.NETLIFY_SITE_ID_AURORA_GLOBAL_LBOARD}}
           cd ${{ matrix.project }}
           if [ "${{ matrix.project }}" == "aurora-global-lboard" ]; then
-              npm i && npm run build && netlify deploy --auth=$NETLIFY_AUTH_TOKEN --prod --dir=.output/public --site=$NETLIFY_SITE_ID_AURORA_GLOBAL_LBOARD
+              npm i && npm run generate && netlify deploy --auth=$NETLIFY_AUTH_TOKEN --prod --dir=.output/public --site=$NETLIFY_SITE_ID_AURORA_GLOBAL_LBOARD
           elif [ "${{ matrix.project }}" == "aurora-phone" ]; then
-              npm i && npm run build && netlify deploy --auth=$NETLIFY_AUTH_TOKEN --prod --dir=.output/public --site=$NETLIFY_SITE_ID_AURORA_PHONE
+              npm i && npm run generate && netlify deploy --auth=$NETLIFY_AUTH_TOKEN --prod --dir=.output/public --site=$NETLIFY_SITE_ID_AURORA_PHONE
           elif [ "${{ matrix.project }}" == "aurora-server" ]; then
-              npm i && npm run build && netlify deploy --auth=$NETLIFY_AUTH_TOKEN --prod --dir=.output/public --site=$NETLIFY_SITE_ID_AURORA_SERVER
+              npm i && npm run generate && netlify deploy --auth=$NETLIFY_AUTH_TOKEN --prod --dir=.output/public --site=$NETLIFY_SITE_ID_AURORA_SERVER
           fi
 
   deploy-api:

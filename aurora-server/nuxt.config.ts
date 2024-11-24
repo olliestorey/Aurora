@@ -9,4 +9,5 @@ export default defineNuxtConfig({
         "https://aurora-cjfsgke2ardmfkhg.uksouth-01.azurewebsites.net",
     },
   },
+  ssr: false,
 });
