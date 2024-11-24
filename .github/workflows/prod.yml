@@ -1,1 +1,83 @@
+name: Deploy Projects
 
+on:
+  push:
+    tags:
+      - "*" # Runs on any tag push
+  workflow_dispatch: # Allows manual trigger
+
+jobs:
+  deploy-fed:
+    runs-on: ubuntu-latest
+    environment: prod
+
+    strategy:
+      matrix:
+        project:
+          - aurora-global-lboard
+          - aurora-phone
+          - aurora-server
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "20.12.0"
+
+      - name: Install Netlify CLI
+        run: npm install -g netlify-cli
+
+      - name: Deploy to Netlify
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID_AURORA_GLOBAL_LBOARD: ${{ secrets.NETLIFY_SITE_ID_AURORA_GLOBAL_LBOARD }}
+          NETLIFY_SITE_ID_AURORA_PHONE: ${{ secrets.NETLIFY_SITE_ID_AURORA_PHONE }}
+          NETLIFY_SITE_ID_AURORA_SERVER: ${{ secrets.NETLIFY_SITE_ID_AURORA_SERVER }}
+        run: |
+          echo ${{secrets.PROD.NETLIFY_SITE_ID_AURORA_GLOBAL_LBOARD}}
+          cd ${{ matrix.project }}
+          if [ "${{ matrix.project }}" == "aurora-global-lboard" ]; then
+              npm i && npm run generate && netlify deploy --auth=$NETLIFY_AUTH_TOKEN --prod --dir=.output/public --site=$NETLIFY_SITE_ID_AURORA_GLOBAL_LBOARD
+          elif [ "${{ matrix.project }}" == "aurora-phone" ]; then
+              npm i && npm run generate && netlify deploy --auth=$NETLIFY_AUTH_TOKEN --prod --dir=.output/public --site=$NETLIFY_SITE_ID_AURORA_PHONE
+          elif [ "${{ matrix.project }}" == "aurora-server" ]; then
+              npm i && npm run generate && netlify deploy --auth=$NETLIFY_AUTH_TOKEN --prod --dir=.output/public --site=$NETLIFY_SITE_ID_AURORA_SERVER
+          fi
+
+  deploy-api:
+    needs: deploy-fed
+    runs-on: ubuntu-latest
+    environment: prod
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Publish
+        run: dotnet publish --configuration Release --no-build --output ./publish
+
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: "Deploy to Azure Web App"
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: "aurora"
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: ./publish
