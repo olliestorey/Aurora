@@ -58,12 +58,11 @@ namespace Aurora.Web.Controllers
 
             if (!request.WordWasSkipped)
             {
-                player.WordsSubmited.Add(request.Word);
                 player.Score += CalculateWordScore(request.Word);
             }
 
             // Player has completed the game
-            bool playerFinished = room.Words.Count == player.WordsSubmited.Count;
+            bool playerFinished = room.Words.Count >= player.WordsSubmited.Count;
 
             if (playerFinished)
             {
