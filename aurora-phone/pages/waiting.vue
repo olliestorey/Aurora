@@ -13,6 +13,9 @@ import * as signalR from "@microsoft/signalr";
 const { $toast } = useNuxtApp();
 const runtimeConfig = useRuntimeConfig();
 const roomCode = useState<string>("roomCode");
+if (roomCode.value === "") {
+  navigateTo({ path: "/" });
+}
 
 const connection = new signalR.HubConnectionBuilder()
   .withUrl(`${runtimeConfig.public.apiBase}/ws/game`, {

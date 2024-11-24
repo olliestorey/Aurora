@@ -35,6 +35,9 @@ const runtimeConfig = useRuntimeConfig();
    name: 'GameScreen',
    setup() {
      const roomCode = useState("roomCode");
+     if(roomCode.value === "") {
+        navigateTo({ path: "/" });
+    }
      const playerKey = useState("playerKey");
 
      const fullWordList = ref([]);
