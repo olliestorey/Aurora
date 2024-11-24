@@ -97,7 +97,6 @@ namespace Aurora.Web.Services
         public string Code { get; set; }
         public List<string> Words { get; set; }
         public List<Player> Players { get; set; }
-
         public DateTime StartTime { get; set; }
         public Room()
         {
@@ -117,6 +116,7 @@ namespace Aurora.Web.Services
         public string Name { get; set; }
         public string Email { get; set; }
         public int Score { get; set; }
+        public bool Finished { get; set; }
         public List<string> WordsSubmited { get; set; }
     }
 
