@@ -13,13 +13,15 @@ namespace Aurora.Web.Controllers
         private readonly ILogger<RoomController> _logger;
         private readonly IRoomService _roomService;
         private readonly IEventDispatcherService _eventDispatcherService;
+        private readonly IGlobalLeaderboardService _globalLeaderboardService;
         private readonly int score = 100;
 
-        public WordController(ILogger<RoomController> logger, IRoomService roomService, IEventDispatcherService eventDispatcherService)
+        public WordController(ILogger<RoomController> logger, IRoomService roomService, IEventDispatcherService eventDispatcherService, IGlobalLeaderboardService globalLeaderboardService)
         {
             _logger = logger;
             _roomService = roomService;
             _eventDispatcherService = eventDispatcherService;
+            _globalLeaderboardService = globalLeaderboardService;
         }
 
         /// <summary>
@@ -58,14 +60,16 @@ namespace Aurora.Web.Controllers
                     var players = room.Players.OrderByDescending(x => x.Score).ToList();
                     var playerPosition = players.FindIndex(x => x.Id == request.PlayerKey) + 1;
                     var positionPoints = 21 - (playerPosition * 1);
+                    var playerName = room.Players.Find(x => x.Id == request.PlayerKey).Name;
                     room.Players.Find(x => x.Id == request.PlayerKey).Score += positionPoints;
 
-                    var playerFinished = new PlayerGameCompletedEvent() { EventMessage = new { PlayerName = room.Players.Find(x => x.Id == request.PlayerKey).Name, Position = playerPosition } };
+                    var playerFinished = new PlayerGameCompletedEvent() { EventMessage = new { PlayerName = playerName, Position = playerPosition } };
 
                     await Task.WhenAll(
                         Task.Run(() => _roomService.UpdateRoom(room)),
                         _eventDispatcherService.DispatchEventAsync(lobbyUpdated),
-                        _eventDispatcherService.DispatchEventAsync(playerFinished)
+                        _eventDispatcherService.DispatchEventAsync(playerFinished),
+                        _globalLeaderboardService.AddEntry(playerName, room.Players.Find(x => x.Id == request.PlayerKey).Score, room.Players.Find(x => x.Id == request.PlayerKey).Email)
                     );
 
                     return new SubmitWordDto(true, playerPosition);
