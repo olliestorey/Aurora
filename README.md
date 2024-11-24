@@ -1,6 +1,7 @@
 # Aurora
 
 Hackathon repo - The Cold Banana, Anagram. Or as we call it. Cold Bananagram.
+For setup instructions, please see Actions. For full local development, create an env in each Nuxt project, using nuxt config as reference.
 
 ## Aurora Server
 
