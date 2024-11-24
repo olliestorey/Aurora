@@ -4,9 +4,7 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   runtimeConfig: {
     public: {
-      apiBase:
-        process.env.NUXT_PUBLIC_API_BASE ||
-        "https://aurora-cjfsgke2ardmfkhg.uksouth-01.azurewebsites.net",
+      apiBase: process.env.NUXT_PUBLIC_API_BASE || "https://localhost:7049/",
     },
   },
   ssr: false,

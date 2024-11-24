@@ -125,6 +125,9 @@ export default defineComponent({
 
     const skipWord = async () => {
       await submitWord(currentAnagramWord.value, true);
+      currentIndex.value++;
+              currentPlayerWord.value = "";
+              setCurrentAnagramWord();
     };
 
     const submitWord = async (word, wasSkipped = false) => {

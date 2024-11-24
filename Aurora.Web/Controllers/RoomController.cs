@@ -51,6 +51,7 @@ namespace Aurora.Web.Controllers
         [HttpPost("join")]
         public async Task<IActionResult> JoinRoom([FromBody] JoinRoomRequest joinRoomRequest)
         {
+  
             try
             {
                 string[] names = System.IO.File.ReadAllLines("data/naughtywords.txt").Select(x => x.Trim()).ToArray();
@@ -70,7 +71,7 @@ namespace Aurora.Web.Controllers
 
             if (room == null)
             {
-                return BadRequest("Invalid email address");
+                return BadRequest("Failed to join room");
             }
 
             var x = new PlayerJoinedGameEvent() { EventMessage = new { PlayerName = joinRoomRequest.PlayerName } };
