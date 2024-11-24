@@ -67,6 +67,7 @@ namespace Aurora.Web.Controllers
 
             if (playerFinished)
             {
+                player.Finished = true;
                 player.Score += (int)(1000 - (DateTime.Now - room.StartTime).TotalSeconds);
             }
 
@@ -76,7 +77,7 @@ namespace Aurora.Web.Controllers
 
             if (playerFinished)
             {
-                playerPosition = room.Players.IndexOf(player) + 1;
+                playerPosition = room.Players.Count(x => x.Finished) + 1;
             }
 
             await _roomService.UpdateRoom(room);
