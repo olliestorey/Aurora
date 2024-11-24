@@ -100,7 +100,7 @@
           >Apply now!</a
         >
 
-        <NuxtLink class="play-again" to="/"> Play Again? </NuxtLink>
+        <a href="/" class="play-again"> Play Again?</a>
       </div>
     </div>
   </div>
