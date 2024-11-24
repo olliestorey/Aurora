@@ -1,7 +1,10 @@
 name: Deploy Nuxt Projects
 
 on:
-  workflow_dispatch:
+  push:
+    tags:
+      - '*'  # Runs on any tag push
+  workflow_dispatch:  # Allows manual trigger
 
 jobs:
   deploy:
