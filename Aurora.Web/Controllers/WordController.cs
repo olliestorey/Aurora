@@ -67,7 +67,7 @@ namespace Aurora.Web.Controllers
             if (playerFinished)
             {
                 player.Finished = true;
-                player.Score += (int)(1000 - (DateTime.Now - room.StartTime).TotalSeconds);
+                player.Score += Math.Max(0, (int)(250 - (DateTime.Now - room.StartTime).TotalSeconds));
             }
 
             room.Players.Remove(room.Players.First(x => x.Id == request.PlayerKey));

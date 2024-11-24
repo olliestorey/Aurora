@@ -68,9 +68,11 @@ export default defineComponent({
 
     const setCurrentAnagramWord = () => {
       const word = fullWordList.value[currentIndex.value];
-      currentAnagramWord.value = word;
-      gameCurrentScrambleTile.value = scrambleWord(word);
-      gameCurrentTitle.value = scrambledTitle(word);
+      if(word){
+        currentAnagramWord.value = word;
+        gameCurrentScrambleTile.value = scrambleWord(word);
+        gameCurrentTitle.value = scrambledTitle(word);
+      }
 
       // Reset all letter classes
       document.querySelectorAll('.game__letter').forEach((letter) => {
