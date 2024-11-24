@@ -106,10 +106,18 @@
   </div>
 </template>
 <script lang="js">
+ import JSConfetti from 'js-confetti'
+const jsConfetti = new JSConfetti();
 const roomCode = useState("roomCode");
+
 if(!roomCode.value) {
   navigateTo({ path: "/" });
 }
+
+setInterval(() => {
+  jsConfetti.addConfetti({emojis: ['🎉', '🦄', '🍌', '🍌', '🧸', '🥳', '😍'],  emojiSize: 30, confettiNumber: 125,});
+}, 1000);
+
 export default defineComponent({
     setup() {
         const position = useState("playerPosition");
