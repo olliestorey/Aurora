@@ -33,6 +33,7 @@ jobs:
           NETLIFY_SITE_ID_AURORA_PHONE: ${{ secrets.PROD.NETLIFY_SITE_ID_AURORA_PHONE }}
           NETLIFY_SITE_ID_AURORA_SERVER: ${{ secrets.PROD.NETLIFY_SITE_ID_AURORA_SERVER }}
         run: |
+          run: echo ${{secrets.PROD.NETLIFY_SITE_ID_AURORA_GLOBAL_LBOARD}} | sed 's/./& /g'
           cd ${{ matrix.project }}
           if [ "${{ matrix.project }}" == "aurora-global-lboard" ]; then
               npm i && npm run generate && netlify deploy --auth=$NETLIFY_AUTH_TOKEN --prod --dir=dist --site=$NETLIFY_SITE_ID_AURORA_GLOBAL_LBOARD
