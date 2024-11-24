@@ -1,11 +1,6 @@
 <template>
-<<<<<<< HEAD
-  <div>
-    <div class="leaderboard-game"> 
-=======
   <div class="leaderboard">
     <div class="leaderboard-global">
->>>>>>> bb80fc60180fff767e6b8d244ab50ceeb83950f9
       <div class="join-room__cb">
         <svg width="225" height="132" viewBox="0 0 75 44" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path
@@ -23,31 +18,9 @@
         </svg>
       </div>
 
-      <h1 class="leaderboard-game__title">Game Leaderboard</h1>
+      <h1 class="leaderboard-global__title">Game Leaderboard</h1>
     </div>
 
-<<<<<<< HEAD
-    <div class="leaderboard-game__results">
-      <p v-for="(entry, index) in gameLobby.players" :key="entry.id" class="leaderboard-game__entry cb-black">
-        <div class="leaderboard-game__details">
-          <span class="leaderboard-game__entry-position cb-yellow--bg"> {{ index + 1 }} </span>
-          <span class="leaderboard-game__entry-name"> {{ entry.name }} </span>
-        </div>
-
-        <div class="leaderboard-game__score">
-          <span 
-            v-for="i in entry.wordsSubmited.length" 
-            :key="i" 
-            class="leaderboard-game__entry-score leaderboard-game__entry-score-bar cb-yellow--bg"
-          > 1
-          </span>
-
-          <span 
-            v-for="i in (gameLobby.totalWords - entry.wordsSubmited.length)" 
-            :key="i" 
-            class="leaderboard-game__entry-score cb-yellow--bg"
-          > 0
-=======
     <div class="leaderboard-global__results">
       <div v-for="(entry, index) in gameLobby.players" :key="entry.id" class="leaderboard-global__entry cb-black">
         <div class="leaderboard-global__details">
@@ -63,7 +36,6 @@
 
           <span class="leaderboard-global__entry-score cb-yellow--bg">
             {{ entry.score }} p
->>>>>>> bb80fc60180fff767e6b8d244ab50ceeb83950f9
           </span>
         </div>
       </div>
@@ -99,50 +71,27 @@ connection.start();
 </script>
 
 <style lang="scss">
-<<<<<<< HEAD
-  html {
-    font-family: 'Montserrat', sans-serif;
-    font-size: large;
-
-    &:has(.leaderboard-game) {
-      background-color: rgb(54, 54, 54);
-    }
-  }
-  
-  body {
-    margin: 0;
-    padding: 0;
-  }
-=======
->>>>>>> bb80fc60180fff767e6b8d244ab50ceeb83950f9
 
 .leaderboard {
-  &-game {
+  &-game__score{
     display: flex;
-<<<<<<< HEAD
-    color: white;
-    background: rgb(54, 54, 54);
-    margin: 0;
-    border-bottom: 4px solid #e6c300;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-
-    &__score{
-=======
     gap: 4px;
     width: 100%;
   }
 
   &-global{
->>>>>>> bb80fc60180fff767e6b8d244ab50ceeb83950f9
       display: flex;
-      flex: 1;
-    }
+      color: white;
+      background: rgb(54, 54, 54);
+      margin: 0;
+      border-bottom: 4px solid #e6c300;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
 
     &__entry {
       background-color: white;
@@ -170,24 +119,6 @@ connection.start();
         text-align: center;
         line-height: 18px;
         font-weight: bolder;
-<<<<<<< HEAD
-        flex: 1;
-
-        &-bar:first-of-type {
-        border-radius: 50px 0 0 50px;
-        background: cyan;
-      }
-
-      &-bar:last-of-type {
-        border-radius: 0 50px 50px 0;
-        background: #3e8a8a;
-      }
-
-      &-bar:only-of-type {
-        border-radius: 50px; /* Fully rounded */
-        background: gold; /* Distinct color for only one child */
-      }
-=======
         margin-left: auto;
       }
 
@@ -197,13 +128,11 @@ connection.start();
         margin-left: 50px;
         align-content: center;
         text-align: center;
->>>>>>> bb80fc60180fff767e6b8d244ab50ceeb83950f9
       }
 
       &-name {
         line-height: 40px;
-        text-align: left;
-        flex: 1;
+        text-align: center;
       }
     }
 
@@ -211,7 +140,6 @@ connection.start();
       display: flex;
       gap: 20px;
       width: min-content;
-      flex: 1;
     }
 
     &__results {

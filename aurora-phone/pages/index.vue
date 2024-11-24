@@ -30,7 +30,7 @@
         </div>
 
         <h1 class="join-room__cb-title">
-          Good Cold <span class="cb-yellow">Banana</span>
+          Cold <span class="cb-yellow">Bananagram</span>
         </h1>
       </div>
 
